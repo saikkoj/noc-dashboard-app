@@ -4,6 +4,7 @@
 
 import type { HealthStatus, Severity, SparklinePoint, ThresholdRule } from '../types/network';
 import { sendIntent, getAppLink } from '@dynatrace-sdk/navigation';
+import type { TopologyNode } from '../types/network';
 
 /* ── Severity colors (hex) ─────────────────────── */
 
@@ -168,6 +169,36 @@ export function getDeviceUrl(entityId: string): string {
 
 export function openDeviceDetail(entityId: string): void {
   try { window.open(getDeviceUrl(entityId), '_blank', 'noopener'); } catch { /* */ }
+}
+
+/**
+ * Open a topology node's detail page in the correct Dynatrace app.
+ * Routes by entity type: K8s workload, experience vitals, infraops, etc.
+ */
+export function openEntityDetail(node: TopologyNode): void {
+  const origin = getEnvOrigin();
+  const id = encodeURIComponent(node.id);
+  let url: string | null = null;
+
+  if (node.id.startsWith('APPLICATION-')) {
+    // Application → Experience Vitals
+    url = `${origin}/ui/apps/dynatrace.experience.vitals/frontends/${id}/overview`;
+  } else if (node.k8sEntityId) {
+    // HOST / PROCESS_GROUP / SERVICE with resolved K8S_DEPLOYMENT → K8s workload
+    const k8sId = encodeURIComponent(node.k8sEntityId);
+    url = `${origin}/ui/apps/dynatrace.kubernetes/smartscape/workload/K8S_WORKLOAD?perspective=Health&detailsId=${k8sId}`;
+  } else if (node.id.startsWith('EXT_NETWORK_DEVICE-')) {
+    // Network device → Infraops
+    url = getDeviceUrl(node.id);
+  } else {
+    // Fallback: send intent and let platform decide
+    try { sendIntent({ 'dt.entity': node.id }); } catch { /* */ }
+    return;
+  }
+
+  if (url) {
+    try { window.open(url, '_blank', 'noopener'); } catch { /* */ }
+  }
 }
 
 export function getProblemUrl(problemId: string): string {

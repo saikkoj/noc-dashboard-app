@@ -2,7 +2,7 @@
   "environmentUrl": "https://bnk46244.apps.dynatrace.com/",
   "app": {
     "name": "NOC Dashboard",
-    "version": "0.10.7",
+    "version": "0.11.2",
     "description": "NOC Dashboard \u2014 digital advisor for your network",
     "id": "my.noc.dashboard",
     "scopes": [

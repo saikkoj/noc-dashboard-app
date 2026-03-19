@@ -164,6 +164,8 @@ export interface TopologyNode {
   userActions?: number;
   /** Apdex score */
   apdex?: number;
+  /** Resolved K8S entity ID for deep-linking (e.g. K8S_DEPLOYMENT-xxx) */
+  k8sEntityId?: string;
 }
 
 export interface TopologyEdge {

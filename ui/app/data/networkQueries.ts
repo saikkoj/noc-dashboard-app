@@ -186,7 +186,7 @@ export const NETWORK_QUERIES = {
     `], sourceField:id, lookupField:affected_entity_ids, prefix:"p."`,
     `| fieldsAdd cpuPct = cpu.cpuPct, memPct = mem.memPct, problems = coalesce(p.problems, 0)`,
     `| fields id, hostName, osType, cpuPct, memPct, problems`,
-    `| limit 100`,
+    `| limit 500`,
   ].join('\n'),
 
   /** Process groups */
@@ -200,11 +200,12 @@ export const NETWORK_QUERIES = {
     `], sourceField:id, lookupField:dt.entity.process_group, prefix:"cpu."`,
     `| lookup [`,
     `  fetch \`dt.entity.process_group_instance\``,
-    `  | summarize instanceCount=count(), by:{dt.entity.process_group}`,
-    `], sourceField:id, lookupField:dt.entity.process_group, prefix:"inst."`,
+    `  | expand pgId = instance_of[\`dt.entity.process_group\`]`,
+    `  | summarize instanceCount=count(), by:{pgId}`,
+    `], sourceField:id, lookupField:pgId, prefix:"inst."`,
     `| fieldsAdd cpuPct = cpu.cpuPct, instances = coalesce(inst.instanceCount, 1)`,
     `| fields id, pgName, technology, cpuPct, instances`,
-    `| limit 100`,
+    `| limit 500`,
   ].join('\n'),
 
   /** Services with request rate, response time, error rate */
@@ -228,7 +229,7 @@ export const NETWORK_QUERIES = {
     `], sourceField:id, lookupField:affected_entity_ids, prefix:"p."`,
     `| fieldsAdd requestRate = m.reqRate, responseTime = m.respTimeMs, errorRate = m.failPct, problems = coalesce(p.problems, 0)`,
     `| fields id, serviceName, technology, requestRate, responseTime, errorRate, problems`,
-    `| limit 100`,
+    `| limit 500`,
   ].join('\n'),
 
   /** Applications (RUM) with apdex, user actions */
@@ -251,53 +252,65 @@ export const NETWORK_QUERIES = {
     `], sourceField:id, lookupField:affected_entity_ids, prefix:"p."`,
     `| fieldsAdd userActions = m.actionRate, apdex = m.apdexScore, problems = coalesce(p.problems, 0)`,
     `| fields id, appName, appType, userActions, apdex, problems`,
-    `| limit 50`,
+    `| limit 200`,
   ].join('\n'),
 
-  /** Smartscape: Host → Network Device edges (runs-on) */
-  hostToDeviceEdges: [
-    `fetch \`dt.entity.host\``,
-    `| expand runs_on = entity.detectedRelationships[\`runs_on\`]`,
-    `| filter isNotNull(runs_on)`,
-    `| filter startsWith(toString(runs_on), "CUSTOM_DEVICE") or startsWith(toString(runs_on), "NETWORK_DEVICE")`,
-    `| fieldsAdd source = id, target = runs_on`,
-    `| fields source, target`,
-  ].join('\n'),
-
-  /** Smartscape: Process group → Host edges (runs-on) */
+  /** Process Group → Host edges (runs-on) */
   processToHostEdges: [
     `fetch \`dt.entity.process_group\``,
-    `| expand hostId = entity.detectedRelationships[\`runs_on\`]`,
-    `| filter isNotNull(hostId) and startsWith(toString(hostId), "HOST")`,
+    `| expand hostId = runs_on[\`dt.entity.host\`]`,
+    `| filter isNotNull(hostId)`,
     `| fieldsAdd source = id, target = hostId`,
     `| fields source, target`,
+    `| limit 500`,
   ].join('\n'),
 
-  /** Smartscape: Service → Service calls edges */
+  /** Host → Network Device edges (runs-on, for environments with SNMP devices) */
+  hostToDeviceEdges: [
+    `fetch \`dt.entity.host\``,
+    `| expand deviceId = runs_on[\`dt.entity.network_device\`]`,
+    `| filter isNotNull(deviceId)`,
+    `| fieldsAdd source = id, target = deviceId`,
+    `| fields source, target`,
+    `| limit 500`,
+  ].join('\n'),
+
+  /** Process Group → Service edges (runs) */
+  serviceToProcessEdges: [
+    `fetch \`dt.entity.process_group\``,
+    `| expand svcId = runs[\`dt.entity.service\`]`,
+    `| filter isNotNull(svcId)`,
+    `| fieldsAdd source = svcId, target = id`,
+    `| fields source, target`,
+    `| limit 500`,
+  ].join('\n'),
+
+  /** Service → Service calls edges */
   serviceCallEdges: [
     `fetch \`dt.entity.service\``,
-    `| expand calledService = entity.detectedRelationships[\`calls\`]`,
-    `| filter isNotNull(calledService) and startsWith(toString(calledService), "SERVICE")`,
+    `| expand calledService = calls[\`dt.entity.service\`]`,
+    `| filter isNotNull(calledService)`,
     `| fieldsAdd source = id, target = calledService`,
     `| fields source, target`,
+    `| limit 500`,
   ].join('\n'),
 
-  /** Smartscape: Service → Process group (provided by) */
-  serviceToProcessEdges: [
-    `fetch \`dt.entity.service\``,
-    `| expand pgId = entity.detectedRelationships[\`provided_by\`]`,
-    `| filter isNotNull(pgId)`,
-    `| fieldsAdd source = id, target = pgId`,
-    `| fields source, target`,
+  /** Service → K8S entity mapping (belongs_to edges from smartscapeEdges) */
+  serviceK8sMapping: [
+    `smartscapeEdges "SERVICE"`,
+    `| filter type == "belongs_to"`,
+    `| fields source_id, target_id`,
+    `| limit 1000`,
   ].join('\n'),
 
-  /** Smartscape: Application → Service edges */
+  /** Application → Service edges (calls) */
   appToServiceEdges: [
     `fetch \`dt.entity.application\``,
-    `| expand svcId = entity.detectedRelationships[\`calls\`]`,
-    `| filter isNotNull(svcId) and startsWith(toString(svcId), "SERVICE")`,
+    `| expand svcId = calls[\`dt.entity.service\`]`,
+    `| filter isNotNull(svcId)`,
     `| fieldsAdd source = id, target = svcId`,
     `| fields source, target`,
+    `| limit 500`,
   ].join('\n'),
 
   /** Davis problems — active alerts grouped by severity */

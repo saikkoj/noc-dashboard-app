@@ -35,7 +35,7 @@ export function Topology() {
   const [isolatedNodeId, setIsolatedNodeId] = useState<string | null>(null);
 
   // Data hooks
-  const { nodes, edges, edgeCounts, isLoading, error } = useTopologyData(size.w, size.h, layoutMode);
+  const { nodes, edges, edgeCounts, isLoading, error, truncationWarnings } = useTopologyData(size.w, size.h, layoutMode);
 
   // Responsive sizing
   useEffect(() => {
@@ -123,6 +123,24 @@ export function Topology() {
         {error && (
           <div style={{ padding: 8, background: 'rgba(220,23,42,0.1)', borderRadius: 6, color: '#dc172a', fontSize: 12 }}>
             Error: {error}
+          </div>
+        )}
+
+        {truncationWarnings.length > 0 && (
+          <div style={{
+            padding: '8px 12px', background: 'rgba(253,130,50,0.1)', borderRadius: 6,
+            border: '1px solid rgba(253,130,50,0.25)', fontSize: 12, color: '#fd8232',
+            display: 'flex', alignItems: 'flex-start', gap: 8,
+          }}>
+            <span style={{ flexShrink: 0 }}>⚠</span>
+            <div>
+              <div style={{ fontWeight: 600, marginBottom: 2 }}>
+                Some queries reached their result limit — topology may be incomplete
+              </div>
+              {truncationWarnings.map((w, i) => (
+                <div key={i} style={{ color: 'rgba(253,130,50,0.8)', fontSize: 11 }}>• {w}</div>
+              ))}
+            </div>
           </div>
         )}
 

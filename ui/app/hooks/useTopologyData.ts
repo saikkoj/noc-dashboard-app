@@ -37,6 +37,30 @@ export interface UseTopologyDataResult {
   edgeCounts: Record<TopologyEdgeType, number>;
   isLoading: boolean;
   error: string | null;
+  /** Warnings about truncated DQL results (queries that hit their limit). */
+  truncationWarnings: string[];
+}
+
+/** Query limits — must match the `| limit N` in networkQueries.ts */
+const QUERY_LIMITS: Record<string, number> = {
+  hosts: 500,
+  processGroups: 500,
+  services: 500,
+  applications: 200,
+  processToHostEdges: 500,
+  hostToDeviceEdges: 500,
+  serviceToProcessEdges: 500,
+  serviceCallEdges: 500,
+  appToServiceEdges: 500,
+};
+
+function checkTruncation(label: string, result: { data?: { records?: unknown[] | null } | null }): string | null {
+  const count = result.data?.records?.length ?? 0;
+  const limit = QUERY_LIMITS[label];
+  if (limit && count >= limit) {
+    return `${label}: showing ${count} of possibly more results (limit ${limit})`;
+  }
+  return null;
 }
 
 function mergeEdges(
@@ -122,12 +146,12 @@ export function useTopologyData(
   );
 
   /* ── Cross-layer edge queries ── */
-  const hostDeviceEdgesResult = useDql(
-    { query: NETWORK_QUERIES.hostToDeviceEdges, defaultTimeframeStart: tfStart, defaultTimeframeEnd: tfEnd },
-    { enabled: !demoMode, refetchInterval: 120_000 },
-  );
   const pgHostEdgesResult = useDql(
     { query: NETWORK_QUERIES.processToHostEdges, defaultTimeframeStart: tfStart, defaultTimeframeEnd: tfEnd },
+    { enabled: !demoMode, refetchInterval: 120_000 },
+  );
+  const hostDeviceEdgesResult = useDql(
+    { query: NETWORK_QUERIES.hostToDeviceEdges, defaultTimeframeStart: tfStart, defaultTimeframeEnd: tfEnd },
     { enabled: !demoMode, refetchInterval: 120_000 },
   );
   const svcCallEdgesResult = useDql(
@@ -140,6 +164,12 @@ export function useTopologyData(
   );
   const appSvcEdgesResult = useDql(
     { query: NETWORK_QUERIES.appToServiceEdges, defaultTimeframeStart: tfStart, defaultTimeframeEnd: tfEnd },
+    { enabled: !demoMode, refetchInterval: 120_000 },
+  );
+
+  /* ── K8S entity mapping (SERVICE belongs_to K8S_DEPLOYMENT) ── */
+  const svcK8sResult = useDql(
+    { query: NETWORK_QUERIES.serviceK8sMapping },
     { enabled: !demoMode, refetchInterval: 120_000 },
   );
 
@@ -181,7 +211,7 @@ export function useTopologyData(
     for (const r of (hostsResult.data?.records ?? []) as any[]) {
       rawNodes.push({
         id: String(r.id ?? ''),
-        label: String(r['entity.name'] ?? 'Host'),
+        label: String(r.hostName ?? r['entity.name'] ?? 'Host'),
         role: 'host',
         health: mapHealth(r.state, toNum(r.problems)),
         cpu: toNum(r.cpuPct),
@@ -194,7 +224,7 @@ export function useTopologyData(
     for (const r of (pgResult.data?.records ?? []) as any[]) {
       rawNodes.push({
         id: String(r.id ?? ''),
-        label: String(r['entity.name'] ?? 'Process Group'),
+        label: String(r.pgName ?? r['entity.name'] ?? 'Process Group'),
         role: 'process-group',
         health: mapHealth(r.state, toNum(r.problems)),
         cpu: toNum(r.cpuPct),
@@ -208,7 +238,7 @@ export function useTopologyData(
     for (const r of (svcResult.data?.records ?? []) as any[]) {
       rawNodes.push({
         id: String(r.id ?? ''),
-        label: String(r['entity.name'] ?? 'Service'),
+        label: String(r.serviceName ?? r['entity.name'] ?? 'Service'),
         role: 'service',
         health: mapHealth(r.state, toNum(r.problems)),
         entityType: 'SERVICE',
@@ -223,7 +253,7 @@ export function useTopologyData(
     for (const r of (appResult.data?.records ?? []) as any[]) {
       rawNodes.push({
         id: String(r.id ?? ''),
-        label: String(r['entity.name'] ?? 'Application'),
+        label: String(r.appName ?? r['entity.name'] ?? 'Application'),
         role: 'application',
         health: mapHealth(r.state, toNum(r.problems)),
         entityType: 'APPLICATION',
@@ -234,6 +264,47 @@ export function useTopologyData(
 
     const nodeIds = new Set(rawNodes.map(n => n.id));
     const nameToId = new Map(rawNodes.map(n => [n.label, n.id]));
+
+    /* ── Resolve K8S entity IDs for deep-linking ── */
+    // Build SERVICE → K8S_DEPLOYMENT map from smartscapeEdges
+    const svcToK8sDeployment = new Map<string, string>();
+    for (const r of (svcK8sResult.data?.records ?? []) as any[]) {
+      const src = String(r.source_id ?? '');
+      const tgt = String(r.target_id ?? '');
+      if (src.startsWith('SERVICE-') && tgt.startsWith('K8S_DEPLOYMENT-')) {
+        svcToK8sDeployment.set(src, tgt);
+      }
+    }
+
+    // Build reverse maps from existing cross-layer edges:
+    // PG → first SERVICE that runs on it (from svcPgEdges: source=svcId, target=pgId)
+    const pgToSvc = new Map<string, string>();
+    for (const r of (svcPgEdgesResult.data?.records ?? []) as any[]) {
+      const svcId = String(r.source ?? '');
+      const pgId = String(r.target ?? '');
+      if (pgId && svcId && !pgToSvc.has(pgId)) pgToSvc.set(pgId, svcId);
+    }
+    // HOST → first PG on it (from pgHostEdges: source=pgId, target=hostId)
+    const hostToPg = new Map<string, string>();
+    for (const r of (pgHostEdgesResult.data?.records ?? []) as any[]) {
+      const pgId = String(r.source ?? '');
+      const hostId = String(r.target ?? '');
+      if (hostId && pgId && !hostToPg.has(hostId)) hostToPg.set(hostId, pgId);
+    }
+
+    // Assign k8sEntityId to each node
+    for (const n of rawNodes) {
+      if (n.entityType === 'SERVICE') {
+        n.k8sEntityId = svcToK8sDeployment.get(n.id);
+      } else if (n.entityType === 'PROCESS_GROUP') {
+        const svcId = pgToSvc.get(n.id);
+        if (svcId) n.k8sEntityId = svcToK8sDeployment.get(svcId);
+      } else if (n.entityType === 'HOST') {
+        const pgId = hostToPg.get(n.id);
+        const svcId = pgId ? pgToSvc.get(pgId) : undefined;
+        if (svcId) n.k8sEntityId = svcToK8sDeployment.get(svcId);
+      }
+    }
 
     const lldpEdges: TopologyEdge[] = (lldpEdgesResult.data?.records ?? [])
       .map((r: any) => {
@@ -265,8 +336,8 @@ export function useTopologyData(
       }));
 
     const runsOnEdges: TopologyEdge[] = [
-      ...parseRelEdges(hostDeviceEdgesResult),
       ...parseRelEdges(pgHostEdgesResult),
+      ...parseRelEdges(hostDeviceEdgesResult),
       ...parseRelEdges(svcPgEdgesResult),
     ];
     const callsEdges: TopologyEdge[] = parseRelEdges(svcCallEdgesResult);
@@ -285,8 +356,8 @@ export function useTopologyData(
     return { nodes, edges: validEdges, edgeCounts };
   }, [demoMode, nodesResult.data, lldpEdgesResult.data, bgpEdgesResult.data, flowEdgesResult.data,
       hostsResult.data, pgResult.data, svcResult.data, appResult.data,
-      hostDeviceEdgesResult.data, pgHostEdgesResult.data, svcCallEdgesResult.data, svcPgEdgesResult.data, appSvcEdgesResult.data,
-      sysLocationByName, width, height, layoutMode]);
+      pgHostEdgesResult.data, hostDeviceEdgesResult.data, svcCallEdgesResult.data, svcPgEdgesResult.data, appSvcEdgesResult.data,
+      svcK8sResult.data, sysLocationByName, width, height, layoutMode]);
 
   const demoScaled = useMemo(() => {
     if (!demoMode) return [];
@@ -305,16 +376,40 @@ export function useTopologyData(
       edgeCounts,
       isLoading: false,
       error: null,
+      truncationWarnings: [],
     };
   }, [demoScaled]);
 
+  const truncationWarnings = useMemo(() => {
+    if (demoMode) return [];
+    return [
+      checkTruncation('hosts', hostsResult),
+      checkTruncation('processGroups', pgResult),
+      checkTruncation('services', svcResult),
+      checkTruncation('applications', appResult),
+      checkTruncation('processToHostEdges', pgHostEdgesResult),
+      checkTruncation('hostToDeviceEdges', hostDeviceEdgesResult),
+      checkTruncation('serviceCallEdges', svcCallEdgesResult),
+      checkTruncation('serviceToProcessEdges', svcPgEdgesResult),
+      checkTruncation('appToServiceEdges', appSvcEdgesResult),
+    ].filter((w): w is string => w !== null);
+  }, [demoMode, hostsResult, pgResult, svcResult, appResult,
+      pgHostEdgesResult, hostDeviceEdgesResult, svcCallEdgesResult, svcPgEdgesResult, appSvcEdgesResult]);
+
   if (demoMode) return demoResult;
+
+  const allErrors = [
+    nodesResult, lldpEdgesResult, bgpEdgesResult, flowEdgesResult,
+    hostsResult, pgResult, svcResult, appResult,
+    pgHostEdgesResult, hostDeviceEdgesResult, svcCallEdgesResult, svcPgEdgesResult, appSvcEdgesResult,
+  ].map(r => r.error?.message).filter(Boolean);
 
   return {
     nodes: liveData?.nodes ?? [],
     edges: liveData?.edges ?? [],
     edgeCounts: liveData?.edgeCounts ?? { lldp: 0, bgp: 0, flow: 0, 'runs-on': 0, calls: 0, serves: 0, manual: 0 },
     isLoading: nodesResult.isLoading || lldpEdgesResult.isLoading,
-    error: nodesResult.error?.message ?? lldpEdgesResult.error?.message ?? null,
+    error: allErrors.length > 0 ? allErrors.join('; ') : null,
+    truncationWarnings,
   };
 }

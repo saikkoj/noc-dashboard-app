@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import type { TopologyNode } from '../types/network';
-import { HEALTH_COLORS, percentBarColor, openDeviceDetail } from '../utils';
+import { HEALTH_COLORS, percentBarColor, openEntityDetail } from '../utils';
 
 interface Props {
   node: TopologyNode;
@@ -134,7 +134,7 @@ export function NodeDetailPanel({ node, onClose, onIsolate, isIsolated }: Props)
       {/* Actions */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 16 }}>
         <button
-          onClick={() => openDeviceDetail(node.id)}
+          onClick={() => openEntityDetail(node)}
           style={actionBtnStyle}
         >
           Open Entity
