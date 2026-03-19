@@ -47,9 +47,9 @@ export function KpiStrip({ overview }: KpiStripProps) {
 
   return (
     <Flex gap={12} flexWrap="wrap">
-      <KpiCard label="Saatavuus" value={formatPct(overview.availability.value)} health={availHealth} />
-      <KpiCard label="Viive (p50)" value={formatMs(overview.latencyP50Ms)} />
-      <KpiCard label="Viive (p95)" value={formatMs(overview.latencyP95Ms)} />
+      <KpiCard label="Availability" value={formatPct(overview.availability.value)} health={availHealth} />
+      <KpiCard label="Latency (p50)" value={formatMs(overview.latencyP50Ms)} />
+      <KpiCard label="Latency (p95)" value={formatMs(overview.latencyP95Ms)} />
       <KpiCard label="Packet Loss" value={formatPct(overview.packetLossPct)} health={lossHealth} />
       <KpiCard label="Jitter" value={formatMs(overview.jitterMs)} />
       <KpiCard label="SLA" value={formatPct(overview.slaCompliancePct)} health={slaHealth} />

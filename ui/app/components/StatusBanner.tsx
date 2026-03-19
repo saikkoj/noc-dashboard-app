@@ -18,7 +18,7 @@ interface StatusBannerProps {
 
 export function StatusBanner({ status, headline, reason }: StatusBannerProps) {
   const color = HEALTH_COLORS[status];
-  const label = status === 'outage' ? 'Outage' : status === 'degraded' ? 'Alentunut' : status === 'healthy' ? 'Toiminnassa' : 'Unknown';
+  const label = status === 'outage' ? 'Outage' : status === 'degraded' ? 'Degraded' : status === 'healthy' ? 'Operational' : 'Unknown';
 
   return (
     <div style={{

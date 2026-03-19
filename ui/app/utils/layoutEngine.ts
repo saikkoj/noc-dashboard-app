@@ -8,8 +8,9 @@
  */
 
 import type { TopologyNode } from '../types/network';
+import { TOPOLOGY_LAYERS, getLayerForRole } from '../types/network';
 
-export type LayoutMode = 'force' | 'horizontal' | 'vertical';
+export type LayoutMode = 'force' | 'horizontal' | 'vertical' | 'layered';
 
 interface MinimalEdge {
   source: string;
@@ -175,6 +176,46 @@ function layeredLayout(
   }
 }
 
+/* ── Role-based layered layout ──────────────────────── */
+
+/**
+ * Places nodes in horizontal bands based on their role's topology layer.
+ * Within each band, nodes are spread evenly along the X axis.
+ */
+function roleLayeredLayout(
+  nodes: Omit<TopologyNode, 'x' | 'y'>[],
+  width: number,
+  height: number,
+): TopologyNode[] {
+  if (nodes.length === 0) return [];
+
+  const numLayers = TOPOLOGY_LAYERS.length;
+  const bandH = (height - 2 * PAD) / numLayers;
+
+  // Group nodes by their layer index
+  const groups = new Map<number, Omit<TopologyNode, 'x' | 'y'>[]>();
+  for (const n of nodes) {
+    const li = getLayerForRole(n.role);
+    if (!groups.has(li)) groups.set(li, []);
+    groups.get(li)!.push(n);
+  }
+
+  return nodes.map(n => {
+    const li = getLayerForRole(n.role);
+    // Reverse: highest layer index (applications) at the top (small Y)
+    const reversedLi = numLayers - 1 - li;
+    const group = groups.get(li) ?? [];
+    const idx = group.indexOf(n);
+    const groupSize = group.length;
+    const xSpacing = (width - 2 * PAD) / Math.max(groupSize + 1, 2);
+    return {
+      ...n,
+      x: PAD + (idx + 1) * xSpacing,
+      y: PAD + reversedLi * bandH + bandH / 2,
+    };
+  });
+}
+
 /* ── Public layout API ─────────────────────────────── */
 
 export function computeLayout(
@@ -189,6 +230,8 @@ export function computeLayout(
       return layeredLayout(nodes, edges, width, height, 'horizontal');
     case 'vertical':
       return layeredLayout(nodes, edges, width, height, 'vertical');
+    case 'layered':
+      return roleLayeredLayout(nodes, width, height);
     case 'force':
     default:
       return forceLayout(nodes, edges, width, height);

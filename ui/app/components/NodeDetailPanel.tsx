@@ -4,11 +4,12 @@
 import React from 'react';
 import type { TopologyNode } from '../types/network';
 import { HEALTH_COLORS, percentBarColor, openDeviceDetail } from '../utils';
-import { openInSmartscape } from '../utils/smartscapeNav';
 
 interface Props {
   node: TopologyNode;
   onClose: () => void;
+  onIsolate?: (nodeId: string) => void;
+  isIsolated?: boolean;
 }
 
 function MiniBar({ label, value, warn, crit }: { label: string; value: number; warn?: number; crit?: number }) {
@@ -26,13 +27,14 @@ function MiniBar({ label, value, warn, crit }: { label: string; value: number; w
   );
 }
 
-export function NodeDetailPanel({ node, onClose }: Props) {
+export function NodeDetailPanel({ node, onClose, onIsolate, isIsolated }: Props) {
   const healthColor = HEALTH_COLORS[node.health] ?? HEALTH_COLORS.unknown;
 
   return (
     <div style={{
       position: 'absolute', top: 0, right: 0, width: 300, height: '100%',
-      background: 'rgba(20,20,26,0.98)', borderLeft: '1px solid rgba(59,130,246,0.2)',
+      background: 'var(--dt-colors-background-surface-default, rgba(20,20,26,0.98))',
+      borderLeft: '1px solid var(--dt-colors-border-neutral-default, rgba(59,130,246,0.2))',
       padding: 16, overflowY: 'auto', zIndex: 10,
     }}>
       {/* Close */}
@@ -64,15 +66,15 @@ export function NodeDetailPanel({ node, onClose }: Props) {
       <div style={{ marginBottom: 16, fontSize: 12, color: '#ccc' }}>
         {node.ip && <div style={{ marginBottom: 4 }}>IP: <span style={{ color: '#fff' }}>{node.ip}</span></div>}
         {node.type && <div style={{ marginBottom: 4 }}>Type: <span style={{ color: '#fff' }}>{node.type}</span></div>}
-        {node.location && <div style={{ marginBottom: 4 }}>Sijainti: <span style={{ color: '#fff' }}>{node.location}</span></div>}
-        {node.entityType && <div style={{ marginBottom: 4 }}>Entiteetti: <span style={{ color: '#fff' }}>{node.entityType}</span></div>}
-        {node.technology && <div style={{ marginBottom: 4 }}>Teknologia: <span style={{ color: '#fff' }}>{node.technology}</span></div>}
+        {node.location && <div style={{ marginBottom: 4 }}>Location: <span style={{ color: '#fff' }}>{node.location}</span></div>}
+        {node.entityType && <div style={{ marginBottom: 4 }}>Entity: <span style={{ color: '#fff' }}>{node.entityType}</span></div>}
+        {node.technology && <div style={{ marginBottom: 4 }}>Technology: <span style={{ color: '#fff' }}>{node.technology}</span></div>}
       </div>
 
       {/* Resource bars */}
       {(node.cpu != null || node.memory != null) && (
         <div style={{ marginBottom: 16 }}>
-          <div style={{ fontSize: 11, color: '#888', marginBottom: 6, fontWeight: 600 }}>Resurssit</div>
+          <div style={{ fontSize: 11, color: '#888', marginBottom: 6, fontWeight: 600 }}>Resources</div>
           {node.cpu != null && <MiniBar label="CPU" value={node.cpu} />}
           {node.memory != null && <MiniBar label="Memory" value={node.memory} />}
         </div>
@@ -81,7 +83,7 @@ export function NodeDetailPanel({ node, onClose }: Props) {
       {/* Service metrics */}
       {(node.requestRate != null || node.responseTime != null || node.errorRate != null) && (
         <div style={{ marginBottom: 16 }}>
-          <div style={{ fontSize: 11, color: '#888', marginBottom: 6, fontWeight: 600 }}>Servicemetriikat</div>
+          <div style={{ fontSize: 11, color: '#888', marginBottom: 6, fontWeight: 600 }}>Service Metrics</div>
           {node.requestRate != null && (
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#ccc', marginBottom: 4 }}>
               <span>Request Rate</span><span style={{ color: '#fff' }}>{node.requestRate.toFixed(1)} req/s</span>
@@ -89,12 +91,12 @@ export function NodeDetailPanel({ node, onClose }: Props) {
           )}
           {node.responseTime != null && (
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#ccc', marginBottom: 4 }}>
-              <span>Vasteaika</span><span style={{ color: '#fff' }}>{node.responseTime.toFixed(0)} ms</span>
+              <span>Response Time</span><span style={{ color: '#fff' }}>{node.responseTime.toFixed(0)} ms</span>
             </div>
           )}
           {node.errorRate != null && (
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
-              <span style={{ color: '#ccc' }}>Virhesuhde</span>
+              <span style={{ color: '#ccc' }}>Error Rate</span>
               <span style={{ color: node.errorRate > 5 ? '#ef5350' : node.errorRate > 1 ? '#ffd54f' : '#4caf50' }}>{node.errorRate.toFixed(2)}%</span>
             </div>
           )}
@@ -106,7 +108,7 @@ export function NodeDetailPanel({ node, onClose }: Props) {
         <div style={{ marginBottom: 16, fontSize: 12, color: '#ccc' }}>
           <div style={{ fontSize: 11, color: '#888', marginBottom: 6, fontWeight: 600 }}>Process Group</div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-            <span>Instanssit</span><span style={{ color: '#fff' }}>{node.instances}</span>
+            <span>Instances</span><span style={{ color: '#fff' }}>{node.instances}</span>
           </div>
         </div>
       )}
@@ -114,7 +116,7 @@ export function NodeDetailPanel({ node, onClose }: Props) {
       {/* Application metrics */}
       {(node.userActions != null || node.apdex != null) && (
         <div style={{ marginBottom: 16 }}>
-          <div style={{ fontSize: 11, color: '#888', marginBottom: 6, fontWeight: 600 }}>Sovellus</div>
+          <div style={{ fontSize: 11, color: '#888', marginBottom: 6, fontWeight: 600 }}>Application</div>
           {node.userActions != null && (
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#ccc', marginBottom: 4 }}>
               <span>User Actions</span><span style={{ color: '#fff' }}>{node.userActions}</span>
@@ -135,14 +137,20 @@ export function NodeDetailPanel({ node, onClose }: Props) {
           onClick={() => openDeviceDetail(node.id)}
           style={actionBtnStyle}
         >
-          Open in Dynatrace
+          Open Entity
         </button>
-        <button
-          onClick={() => openInSmartscape(node.id)}
-          style={actionBtnStyle}
-        >
-          Open in Smartscape
-        </button>
+        {onIsolate && (
+          <button
+            onClick={() => onIsolate(node.id)}
+            style={{
+              ...actionBtnStyle,
+              background: isIsolated ? 'rgba(59,130,246,0.2)' : actionBtnStyle.background,
+              border: isIsolated ? '1px solid #3B82F6' : actionBtnStyle.border,
+            }}
+          >
+            {isIsolated ? 'Exit Isolation' : 'Isolate Entity'}
+          </button>
+        )}
       </div>
     </div>
   );

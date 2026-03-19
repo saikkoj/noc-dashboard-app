@@ -16,13 +16,14 @@ interface TimeframeState {
   refreshKey: number;
   dqlTimeframe: DqlTimeframe;
   setRange: (from: string, to: string) => void;
+  setTimeframe: (from: string, to: string) => void;
   refresh: () => void;
 }
 
 const TimeframeContext = createContext<TimeframeState>({
   from: 'now-2h', to: 'now', refreshKey: 0,
   dqlTimeframe: {},
-  setRange: () => undefined, refresh: () => undefined,
+  setRange: () => undefined, setTimeframe: () => undefined, refresh: () => undefined,
 });
 
 export function TimeframeProvider({ children }: { children: ReactNode }) {
@@ -44,7 +45,7 @@ export function TimeframeProvider({ children }: { children: ReactNode }) {
   const refresh = useCallback(() => setRefreshKey((k) => k + 1), []);
 
   return (
-    <TimeframeContext.Provider value={{ from, to, refreshKey, dqlTimeframe, setRange, refresh }}>
+    <TimeframeContext.Provider value={{ from, to, refreshKey, dqlTimeframe, setRange, setTimeframe: setRange, refresh }}>
       {children}
     </TimeframeContext.Provider>
   );

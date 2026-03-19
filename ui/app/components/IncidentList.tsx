@@ -18,7 +18,7 @@ interface IncidentListProps {
 const statusLabel: Record<string, string> = {
   open: 'Open',
   acknowledged: 'Acknowledged',
-  resolved: 'Ratkaistu',
+  resolved: 'Resolved',
 };
 
 function SeverityBadge({ severity }: { severity: Severity }) {

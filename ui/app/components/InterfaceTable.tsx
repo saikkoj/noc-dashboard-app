@@ -11,7 +11,8 @@ import { useTimeframe } from '../hooks/useTimeframe';
 import { NETWORK_QUERIES } from '../data/networkQueries';
 import { DEMO_INTERFACES } from '../data/demoData';
 import type { NetworkInterface } from '../types/network';
-import { toNum, percentBarColor, formatTraffic, HEALTH_COLORS } from '../utils';
+import { toNum, percentBarColor, formatTraffic, HEALTH_COLORS, entityLinkStyle, openDeviceDetail } from '../utils';
+import { DEMO_DEVICES } from '../data/demoData';
 
 function LoadBar({ value }: { value: number }) {
   const color = percentBarColor(value, 60, 80);
@@ -72,6 +73,14 @@ export function InterfaceTable() {
 
   const interfaces = demoMode ? DEMO_INTERFACES : liveInterfaces;
 
+  const devices_map = useMemo(() => {
+    const map = new Map<string, string>();
+    if (demoMode) {
+      for (const d of DEMO_DEVICES) map.set(d.name, d.entityId);
+    }
+    return map;
+  }, [demoMode]);
+
   const filtered = useMemo(() => {
     if (!filterText.trim()) return interfaces;
     const lc = filterText.toLowerCase();
@@ -82,8 +91,18 @@ export function InterfaceTable() {
   }, [interfaces, filterText]);
 
   const columns: DataTableColumnDef<NetworkInterface>[] = [
-    { id: 'deviceName', header: 'Device', accessor: 'deviceName' },
-    { id: 'name', header: 'Rajapinta', accessor: 'name' },
+    {
+      id: 'deviceName',
+      header: 'Device',
+      accessor: 'deviceName',
+      cell: ({ value, rowData }: any) => {
+        const dev = devices_map.get(rowData.deviceName);
+        return dev ? (
+          <span style={entityLinkStyle} onClick={() => openDeviceDetail(dev)}>{value}</span>
+        ) : <span>{value}</span>;
+      },
+    },
+    { id: 'name', header: 'Interface', accessor: 'name' },
     {
       id: 'status',
       header: 'Status',
@@ -92,19 +111,19 @@ export function InterfaceTable() {
     },
     {
       id: 'inLoad',
-      header: 'Kuormitus (IN)',
+      header: 'Load (IN)',
       accessor: 'inLoad',
       cell: ({ value }: any) => <LoadBar value={value} />,
     },
     {
       id: 'outLoad',
-      header: 'Kuormitus (OUT)',
+      header: 'Load (OUT)',
       accessor: 'outLoad',
       cell: ({ value }: any) => <LoadBar value={value} />,
     },
     {
       id: 'inErrors',
-      header: 'Virheet (IN/OUT)',
+      header: 'Errors (IN/OUT)',
       accessor: 'inErrors',
       cell: ({ rowData }: any) => {
         const inE = rowData.inErrors;
@@ -151,7 +170,7 @@ export function InterfaceTable() {
       <FilterBar onFilterChange={() => {}}>
         <FilterBar.Item name="search" label="Search">
           <TextInput
-            placeholder="Hae laitteella tai rajapinnalla…"
+            placeholder="Search by device or interface…"
             value={filterText}
             onChange={setFilterText}
           />

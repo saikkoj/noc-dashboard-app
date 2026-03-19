@@ -10,14 +10,18 @@ import {
 } from '../data/customerData';
 import { BandwidthUpgradeModal } from '../components/BandwidthUpgradeModal';
 import { ForecastChart } from '../components/ForecastChart';
-import { HEALTH_COLORS, formatTraffic, formatPct } from '../utils';
+import { HEALTH_COLORS, formatTraffic, formatPct, modeBadgeStyle } from '../utils';
+import { useDemoMode } from '../hooks/useDemoMode';
 
 export default function Forecasts() {
+  const { demoMode } = useDemoMode();
   const [selectedSvc, setSelectedSvc] = useState<CustomerService | null>(null);
   const [upgradeService, setUpgradeService] = useState<CustomerService | null>(null);
 
-  const services = DEMO_CUSTOMER_SERVICES.filter(s => s.orderedBandwidthMbps > 0);
-  const forecasts = DEMO_FORECASTS;
+  const services = demoMode
+    ? DEMO_CUSTOMER_SERVICES.filter(s => s.orderedBandwidthMbps > 0)
+    : [];
+  const forecasts = demoMode ? DEMO_FORECASTS : [];
 
   const getForecast = (svcId: string) => forecasts.find(f => f.serviceId === svcId);
 
@@ -32,11 +36,21 @@ export default function Forecasts() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <div>
-        <div style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>Capacity Forecastet</div>
-        <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>AI-based bandwidth usage forecast for your services</div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>Capacity Forecasts</div>
+          <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>AI-based bandwidth usage forecast for your services</div>
+        </div>
+        <span style={modeBadgeStyle(demoMode)}>{demoMode ? 'DEMO' : 'LIVE'}</span>
       </div>
 
+      {!demoMode && services.length === 0 ? (
+        <div style={{ padding: 40, textAlign: 'center', color: '#888' }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>No forecast data available</div>
+          <div style={{ fontSize: 12 }}>Forecast data is provided in demo mode. Switch to Demo mode to see example data.</div>
+        </div>
+      ) : (
+        <>
       {/* Forecast table */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {/* Header row */}
@@ -86,21 +100,21 @@ export default function Forecasts() {
                   ? days80 < 60 ? '#dc172a' : days80 < 120 ? '#fd8232' : HEALTH_COLORS.healthy 
                   : days80 === 0 ? '#dc172a' : '#666',
               }}>
-                {days80 != null && days80 > 0 ? `${days80} pv` : days80 === 0 ? 'Exceeded' : '—'}
+                {days80 != null && days80 > 0 ? `${days80} days` : days80 === 0 ? 'Exceeded' : '—'}
               </span>
               <span style={{
                 color: days95 != null && days95 > 0
                   ? days95 < 90 ? '#dc172a' : days95 < 180 ? '#fd8232' : '#666'
                   : '#666',
               }}>
-                {days95 != null && days95 > 0 ? `${days95} pv` : '—'}
+                {days95 != null && days95 > 0 ? `${days95} days` : '—'}
               </span>
               <span style={{ textAlign: 'right' }}>
                 {fc?.recommendedUpgradeMbps && (
                   <span style={{
                     padding: '2px 8px', borderRadius: 10, fontSize: 10,
-                    background: 'rgba(255,45,141,0.15)', color: '#FF2D8D',
-                  }}>Nosta</span>
+                    background: 'rgba(59,130,246,0.15)', color: '#3B82F6',
+                  }}>Upgrade</span>
                 )}
               </span>
             </button>
@@ -110,9 +124,9 @@ export default function Forecasts() {
 
       {/* Legend */}
       <div style={{ display: 'flex', gap: 16, fontSize: 10, color: '#666' }}>
-        <span>🟢 Sufficient (&gt;120 pv)</span>
-        <span style={{ color: '#fd8232' }}>🟠 Monitor (60–120 pv)</span>
-        <span style={{ color: '#dc172a' }}>🔴 Critical (&lt;60 pv)</span>
+        <span>🟢 Sufficient (&gt;120 days)</span>
+        <span style={{ color: '#fd8232' }}>🟠 Monitor (60–120 days)</span>
+        <span style={{ color: '#dc172a' }}>🔴 Critical (&lt;60 days)</span>
       </div>
 
       {/* Forecast modal */}
@@ -135,6 +149,8 @@ export default function Forecasts() {
           onClose={() => setUpgradeService(null)}
           onSubmit={() => setUpgradeService(null)}
         />
+      )}
+        </>
       )}
     </div>
   );

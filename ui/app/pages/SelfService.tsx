@@ -45,9 +45,9 @@ function fakeDiagnostics(target: string, checkType: string): DiagResult[] {
   }
   if (checkType === 'port') {
     base.push(
-      { check: 'Portti 22 (SSH)', status: 'ok', detail: 'Open', ms: 15 },
-      { check: 'Portti 443 (HTTPS)', status: 'ok', detail: 'Open', ms: 18 },
-      { check: 'Portti 161 (SNMP)', status: 'warning', detail: 'Timeout', ms: 5000 },
+      { check: 'Port 22 (SSH)', status: 'ok', detail: 'Open', ms: 15 },
+      { check: 'Port 443 (HTTPS)', status: 'ok', detail: 'Open', ms: 18 },
+      { check: 'Port 161 (SNMP)', status: 'warning', detail: 'Timeout', ms: 5000 },
     );
   }
   if (checkType === 'snmp') {
@@ -89,7 +89,7 @@ export function SelfService() {
     s === 'ok' ? HEALTH_COLORS.healthy : s === 'warning' ? HEALTH_COLORS.warning : HEALTH_COLORS.critical;
 
   const statusLabel = (s: DiagResult['status']) =>
-    s === 'ok' ? 'OK' : s === 'warning' ? 'VAROITUS' : 'VIRHE';
+    s === 'ok' ? 'OK' : s === 'warning' ? 'WARNING' : 'ERROR';
 
   return (
     <Flex flexDirection="column" gap={16} padding={0}>
@@ -108,15 +108,15 @@ export function SelfService() {
         background: 'rgba(255,255,255,0.03)', padding: 16, borderRadius: 8,
       }}>
         <div>
-          <div style={{ fontSize: 12, color: '#999', marginBottom: 4 }}>Kohde (IP tai hostname)</div>
+          <div style={{ fontSize: 12, color: '#999', marginBottom: 4 }}>Target (IP or hostname)</div>
           <TextInput
-            placeholder="esim. 10.0.1.1 tai hel-core-rtr-01"
+            placeholder="e.g. 10.0.1.1 or hel-core-rtr-01"
             value={target}
             onChange={setTarget}
           />
         </div>
         <div>
-          <div style={{ fontSize: 12, color: '#999', marginBottom: 4 }}>Tarkistustyyppi</div>
+          <div style={{ fontSize: 12, color: '#999', marginBottom: 4 }}>Check Type</div>
           <SelectV2
             value={checkType}
             onChange={(val: string) => setCheckType(val)}
@@ -138,7 +138,7 @@ export function SelfService() {
       {/* Running indicator */}
       {diagStatus === 'running' && (
         <div style={{ textAlign: 'center', padding: 24, color: '#888' }}>
-          <div style={{ fontSize: 14, marginBottom: 8 }}>Suoritetaan diagnostiikkaa…</div>
+          <div style={{ fontSize: 14, marginBottom: 8 }}>Running diagnostics…</div>
           <div style={{ width: 120, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.08)', margin: '0 auto', overflow: 'hidden' }}>
             <div style={{
               width: '40%', height: '100%', background: BRAND_PRIMARY, borderRadius: 2,
@@ -152,15 +152,15 @@ export function SelfService() {
       {diagStatus === 'done' && results.length > 0 && (
         <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 8, overflow: 'hidden' }}>
           <div style={{ padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)', fontWeight: 600, fontSize: 13, color: '#fff' }}>
-            Tulokset — {target}
+            Results — {target}
           </div>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
             <thead>
               <tr style={{ color: '#888', textAlign: 'left' }}>
-                <th style={{ padding: '8px 16px', fontWeight: 500 }}>Tarkistus</th>
+                <th style={{ padding: '8px 16px', fontWeight: 500 }}>Check</th>
                 <th style={{ padding: '8px 16px', fontWeight: 500 }}>Status</th>
-                <th style={{ padding: '8px 16px', fontWeight: 500 }}>Tiedot</th>
-                <th style={{ padding: '8px 16px', fontWeight: 500, textAlign: 'right' }}>Aika</th>
+                <th style={{ padding: '8px 16px', fontWeight: 500 }}>Details</th>
+                <th style={{ padding: '8px 16px', fontWeight: 500, textAlign: 'right' }}>Time</th>
               </tr>
             </thead>
             <tbody>

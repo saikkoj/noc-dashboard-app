@@ -37,7 +37,7 @@ function UsageGauge({ current, ordered, peak }: { current: number; ordered: numb
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#777', marginTop: 2 }}>
         <span style={{ color }}>{pct.toFixed(0)}% in use</span>
-        <span>Huippu: {peakPct.toFixed(0)}%</span>
+        <span>Peak: {peakPct.toFixed(0)}%</span>
       </div>
     </div>
   );
@@ -83,14 +83,14 @@ export function ServiceCard({ service, forecast, onUpgrade, onOpenTicket, onView
           <span style={{ color: slaOk ? HEALTH_COLORS.healthy : HEALTH_COLORS.critical }}>
             {formatPct(service.slaActual)}
           </span>
-          <span style={{ color: '#666' }}> / {formatPct(service.slaTarget)} tavoite</span>
+          <span style={{ color: '#666' }}> / {formatPct(service.slaTarget)} target</span>
         </span>
       </div>
 
       {/* Cost & contract */}
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11 }}>
-        <span style={{ color: '#999' }}>Hinta</span>
-        <span style={{ color: '#ccc' }}>{service.monthlyCostEur.toLocaleString('fi-FI')} €/kk</span>
+        <span style={{ color: '#999' }}>Price</span>
+        <span style={{ color: '#ccc' }}>{service.monthlyCostEur.toLocaleString('en-US')} €/mo</span>
       </div>
 
       {/* Forecast warning */}
@@ -135,7 +135,7 @@ export function ServiceCard({ service, forecast, onUpgrade, onOpenTicket, onView
 
 const actionBtnPrimary: React.CSSProperties = {
   padding: '6px 14px', borderRadius: 6, border: 'none',
-  background: '#FF2D8D', color: '#fff', cursor: 'pointer',
+  background: '#3B82F6', color: '#fff', cursor: 'pointer',
   fontSize: 11, fontWeight: 600,
 };
 

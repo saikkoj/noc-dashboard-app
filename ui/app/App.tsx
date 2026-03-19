@@ -23,6 +23,7 @@ import MyServices from './pages/MyServices';
 import Tickets from './pages/Tickets';
 import Forecasts from './pages/Forecasts';
 import Notifications from './pages/Notifications';
+import { Alerts } from './pages/Alerts';
 
 function AppContent() {
   const { refreshKey } = useTimeframe();
@@ -45,6 +46,7 @@ function AppContent() {
           <Route path="/tickets" element={<Tickets />} />
           <Route path="/forecasts" element={<Forecasts />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/alerts" element={<Alerts />} />
         </Routes>
       </Page.Main>
     </Page>

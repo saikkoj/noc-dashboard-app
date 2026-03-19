@@ -1,6 +1,6 @@
 {
   "name": "noc-dashboard-app",
-  "version": "0.1.0",
+  "version": "0.10.7",
   "description": "NOC Dashboard \u2014 Network operations dashboard on Dynatrace App Platform.",
   "scripts": {
     "build": "dt-app build --prod",

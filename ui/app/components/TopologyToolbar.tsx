@@ -4,6 +4,7 @@
 import React from 'react';
 import type { LayoutMode } from '../utils/layoutEngine';
 import type { TopologyEdgeType } from '../types/network';
+import { TOPOLOGY_LAYERS } from '../types/network';
 
 export type RenderMode = '2d' | '3d';
 
@@ -15,12 +16,16 @@ interface Props {
   visibleEdgeTypes: Set<TopologyEdgeType>;
   onToggleEdgeType: (type: TopologyEdgeType) => void;
   edgeCounts: Record<TopologyEdgeType, number>;
+  visibleLayers: Set<string>;
+  onToggleLayer: (layerId: string) => void;
+  layerNodeCounts: Record<string, number>;
 }
 
 const LAYOUT_OPTIONS: { value: LayoutMode; label: string }[] = [
-  { value: 'force', label: 'Voima' },
-  { value: 'horizontal', label: 'Vaaka' },
-  { value: 'vertical', label: 'Pysty' },
+  { value: 'force', label: 'Force' },
+  { value: 'horizontal', label: 'Horizontal' },
+  { value: 'vertical', label: 'Vertical' },
+  { value: 'layered', label: 'Layered' },
 ];
 
 const EDGE_TYPES: { value: TopologyEdgeType; label: string; color: string }[] = [
@@ -29,10 +34,10 @@ const EDGE_TYPES: { value: TopologyEdgeType; label: string; color: string }[] = 
   { value: 'flow', label: 'Flow', color: '#ffd54f' },
   { value: 'runs-on', label: 'Runs-on', color: '#6b7280' },
   { value: 'calls', label: 'Calls', color: '#ff9800' },
-  { value: 'serves', label: 'Serves', color: '#e91e63' },
+  { value: 'serves', label: 'Serves', color: '#ff6e40' },
 ];
 
-export function TopologyToolbar({ layoutMode, onLayoutChange, renderMode, onRenderModeChange, visibleEdgeTypes, onToggleEdgeType, edgeCounts }: Props) {
+export function TopologyToolbar({ layoutMode, onLayoutChange, renderMode, onRenderModeChange, visibleEdgeTypes, onToggleEdgeType, edgeCounts, visibleLayers, onToggleLayer, layerNodeCounts }: Props) {
   return (
     <div style={{
       display: 'flex', alignItems: 'center', gap: 16, padding: '8px 0',
@@ -40,7 +45,7 @@ export function TopologyToolbar({ layoutMode, onLayoutChange, renderMode, onRend
     }}>
       {/* Layout selector */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <span style={{ opacity: 0.6 }}>Asettelu:</span>
+        <span style={{ opacity: 0.6 }}>Layout:</span>
         {LAYOUT_OPTIONS.map(opt => (
           <button
             key={opt.value}
@@ -98,6 +103,32 @@ export function TopologyToolbar({ layoutMode, onLayoutChange, renderMode, onRend
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: active ? et.color : '#555', display: 'inline-block' }} />
               {et.label}
               <span style={{ opacity: 0.5, fontSize: 10 }}>({edgeCounts[et.value] ?? 0})</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Layer toggles */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+        <span style={{ opacity: 0.6 }}>Layers:</span>
+        {TOPOLOGY_LAYERS.map(layer => {
+          const active = visibleLayers.has(layer.id);
+          const count = layerNodeCounts[layer.id] ?? 0;
+          return (
+            <button
+              key={layer.id}
+              onClick={() => onToggleLayer(layer.id)}
+              style={{
+                padding: '3px 8px', borderRadius: 6, border: '1px solid',
+                borderColor: active ? layer.color : 'rgba(255,255,255,0.1)',
+                background: active ? `${layer.color}18` : 'transparent',
+                color: active ? layer.color : '#666',
+                cursor: 'pointer', fontSize: 11, display: 'flex', alignItems: 'center', gap: 3,
+              }}
+            >
+              <span style={{ width: 7, height: 7, borderRadius: 2, background: active ? layer.color : '#555', display: 'inline-block' }} />
+              {layer.label}
+              {count > 0 && <span style={{ opacity: 0.5, fontSize: 9 }}>({count})</span>}
             </button>
           );
         })}

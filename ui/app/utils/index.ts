@@ -230,6 +230,18 @@ const LOCATION_MAP: Array<{ pattern: RegExp; city: string }> = [
   { pattern: /frankfurt/i, city: 'Frankfurt' },
   { pattern: /amsterdam/i, city: 'Amsterdam' },
   { pattern: /stockholm/i, city: 'Stockholm' },
+  // Australia / New Zealand
+  { pattern: /SYD/i, city: 'Sydney' },
+  { pattern: /MEL/i, city: 'Melbourne' },
+  { pattern: /AKL/i, city: 'Auckland' },
+  { pattern: /WLG/i, city: 'Wellington' },
+  { pattern: /sydney/i, city: 'Sydney' },
+  { pattern: /melbourne/i, city: 'Melbourne' },
+  { pattern: /auckland/i, city: 'Auckland' },
+  { pattern: /wellington/i, city: 'Wellington' },
+  { pattern: /brisbane/i, city: 'Brisbane' },
+  { pattern: /perth/i, city: 'Perth' },
+  { pattern: /ap-southeast-2/i, city: 'Sydney' },
   // AWS regions
   { pattern: /us-east-1/i, city: 'Virginia' },
   { pattern: /us-west-2/i, city: 'Oregon' },

@@ -299,4 +299,110 @@ export const NETWORK_QUERIES = {
     `| fieldsAdd source = id, target = svcId`,
     `| fields source, target`,
   ].join('\n'),
+
+  /** Davis problems — active alerts grouped by severity */
+  davisProblems: [
+    `fetch dt.davis.problems`,
+    `| filter status == "OPEN"`,
+    `| fieldsAdd problemId = event.id, displayId = display_id`,
+    `| fieldsAdd title = event.name`,
+    `| fieldsAdd severity = event.category`,
+    `| fieldsAdd status = status`,
+    `| fieldsAdd startTime = timestamp`,
+    `| fieldsAdd endTime = end_time`,
+    `| fieldsAdd affectedEntities = affected_entity_ids`,
+    `| fieldsAdd rootCauseEntity = root_cause_entity_id`,
+    `| fieldsAdd managementZone = management_zones`,
+    `| fields problemId, displayId, title, severity, status, startTime, endTime, affectedEntities, rootCauseEntity, managementZone`,
+    `| sort startTime desc`,
+    `| limit 200`,
+  ].join('\n'),
+
+  /** Top 10 interfaces by error rate with device name */
+  topInterfacesByErrors: [
+    `timeseries {`,
+    `  errIn=sum(com.dynatrace.extension.network_device.if.in.errors.count),`,
+    `  errOut=sum(com.dynatrace.extension.network_device.if.out.errors.count),`,
+    `  ifInBytes=sum(com.dynatrace.extension.network_device.if.bytes_in.count),`,
+    `  ifOutBytes=sum(com.dynatrace.extension.network_device.if.bytes_out.count)`,
+    `}, by:{\`dt.entity.network:device\`, \`dt.entity.network:interface\`}`,
+    `| fieldsAdd totalErrors = coalesce(arraySum(errIn), 0) + coalesce(arraySum(errOut), 0)`,
+    `| fieldsAdd totalBytes = coalesce(arraySum(ifInBytes), 0) + coalesce(arraySum(ifOutBytes), 0)`,
+    `| fieldsAdd errorRate = if(totalBytes > 0, totalErrors / totalBytes * 100, else: 0.0)`,
+    `| filter totalErrors > 0`,
+    `| lookup [`,
+    `  fetch \`dt.entity.network:device\` | fieldsAdd deviceName = entity.name`,
+    `], sourceField:\`dt.entity.network:device\`, lookupField:id, prefix:"d."`,
+    `| lookup [`,
+    `  fetch \`dt.entity.network:interface\` | fieldsAdd interfaceName = entity.name`,
+    `], sourceField:\`dt.entity.network:interface\`, lookupField:id, prefix:"if."`,
+    `| fields \`dt.entity.network:interface\`, if.interfaceName, d.deviceName, totalErrors, totalBytes, errorRate`,
+    `| sort errorRate desc`,
+    `| limit 10`,
+  ].join('\n'),
+
+  /** Overview — device reachability for availability KPI */
+  overviewAvailability: [
+    `fetch \`dt.entity.network:device\``,
+    `| lookup [`,
+    `  timeseries reachable=avg(com.dynatrace.extension.network_device.reachability), by:{\`dt.entity.network:device\`}`,
+    `  | fieldsAdd avgReach = arrayAvg(reachable)`,
+    `], sourceField:id, lookupField:\`dt.entity.network:device\`, prefix:"r."`,
+    `| fieldsAdd reachPct = coalesce(r.avgReach, 100)`,
+    `| summarize avgAvailability = avg(reachPct), deviceCount = count()`,
+  ].join('\n'),
+
+  /** Overview — latency p50 / p95 from ICMP response time */
+  overviewLatency: [
+    `timeseries respTime=avg(com.dynatrace.extension.network_device.icmp_response_time), by:{\`dt.entity.network:device\`}`,
+    `| fieldsAdd avgMs = arrayAvg(respTime)`,
+    `| summarize p50 = percentile(avgMs, 50), p95 = percentile(avgMs, 95)`,
+  ].join('\n'),
+
+  /** Overview — sites with device counts, derived from location */
+  overviewSites: [
+    `fetch \`dt.entity.network:device\``,
+    `| fieldsAdd deviceName = entity.name`,
+    `| lookup [`,
+    `  fetch dt.davis.problems`,
+    `  | expand affected_entity_ids`,
+    `  | filter startsWith(affected_entity_ids, "CUSTOM_DEVICE")`,
+    `  | filter status == "OPEN"`,
+    `  | summarize problems=countDistinct(display_id), by:{affected_entity_ids}`,
+    `], sourceField:id, lookupField:affected_entity_ids, prefix:"p."`,
+    `| fieldsAdd problems = coalesce(p.problems, 0)`,
+    `| fields id, deviceName, problems`,
+  ].join('\n'),
+
+  /** Incidents for Incidents page — Davis problems as incidents (all statuses) */
+  incidentsAll: [
+    `fetch dt.davis.problems`,
+    `| fieldsAdd problemId = event.id, displayId = display_id`,
+    `| fieldsAdd title = event.name`,
+    `| fieldsAdd severity = event.category`,
+    `| fieldsAdd status = status`,
+    `| fieldsAdd startTime = timestamp`,
+    `| fieldsAdd endTime = end_time`,
+    `| fieldsAdd affectedEntities = affected_entity_ids`,
+    `| fieldsAdd rootCauseEntity = root_cause_entity_id`,
+    `| fieldsAdd managementZone = management_zones`,
+    `| fields problemId, displayId, title, severity, status, startTime, endTime, affectedEntities, rootCauseEntity, managementZone`,
+    `| sort startTime desc`,
+    `| limit 200`,
+  ].join('\n'),
+
+  /** SLA — availability and downtime derived from device reachability */
+  slaOverview: [
+    `fetch \`dt.entity.network:device\``,
+    `| lookup [`,
+    `  timeseries reachable=avg(com.dynatrace.extension.network_device.reachability), by:{\`dt.entity.network:device\`}`,
+    `  | fieldsAdd avgReach = arrayAvg(reachable)`,
+    `], sourceField:id, lookupField:\`dt.entity.network:device\`, prefix:"r."`,
+    `| fieldsAdd reachPct = coalesce(r.avgReach, 100)`,
+    `| fieldsAdd deviceName = entity.name`,
+    `| fieldsAdd downtimeFraction = (100 - reachPct) / 100`,
+    `| sort reachPct asc`,
+    `| fields id, deviceName, reachPct, downtimeFraction`,
+    `| limit 100`,
+  ].join('\n'),
 } as const;

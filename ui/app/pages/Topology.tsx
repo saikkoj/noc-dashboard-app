@@ -12,6 +12,7 @@ import type { RenderMode } from '../components/TopologyToolbar';
 import { NodeDetailPanel } from '../components/NodeDetailPanel';
 import { useTopologyData } from '../hooks/useTopologyData';
 import type { TopologyNode, TopologyEdgeType } from '../types/network';
+import { TOPOLOGY_LAYERS, getLayerForRole } from '../types/network';
 import type { LayoutMode } from '../utils/layoutEngine';
 import { modeBadgeStyle } from '../utils';
 import { useDemoMode } from '../hooks/useDemoMode';
@@ -22,12 +23,16 @@ export function Topology() {
   const [size, setSize] = useState({ w: 960, h: 540 });
 
   // Layout & filter state
-  const [layoutMode, setLayoutMode] = useState<LayoutMode>('force');
+  const [layoutMode, setLayoutMode] = useState<LayoutMode>('horizontal');
   const [renderMode, setRenderMode] = useState<RenderMode>('2d');
   const [visibleEdgeTypes, setVisibleEdgeTypes] = useState<Set<TopologyEdgeType>>(
     new Set(['lldp', 'bgp', 'flow', 'runs-on', 'calls', 'serves']),
   );
+  const [visibleLayers, setVisibleLayers] = useState<Set<string>>(
+    new Set(TOPOLOGY_LAYERS.map(l => l.id)),
+  );
   const [selectedNode, setSelectedNode] = useState<TopologyNode | null>(null);
+  const [isolatedNodeId, setIsolatedNodeId] = useState<string | null>(null);
 
   // Data hooks
   const { nodes, edges, edgeCounts, isLoading, error } = useTopologyData(size.w, size.h, layoutMode);
@@ -53,12 +58,46 @@ export function Topology() {
     });
   }, []);
 
+  const toggleLayer = useCallback((layerId: string) => {
+    setVisibleLayers(prev => {
+      const next = new Set(prev);
+      if (next.has(layerId)) next.delete(layerId);
+      else next.add(layerId);
+      return next;
+    });
+  }, []);
+
   const handleSelectNode = useCallback((n: TopologyNode | null) => setSelectedNode(n), []);
 
-  const filteredEdges = useMemo(
-    () => edges.filter(e => !e.edgeType || visibleEdgeTypes.has(e.edgeType)),
-    [edges, visibleEdgeTypes],
-  );
+  const handleIsolate = useCallback((nodeId: string) => {
+    setIsolatedNodeId(prev => prev === nodeId ? null : nodeId);
+  }, []);
+
+  /** Count nodes per layer */
+  const layerNodeCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const n of nodes) {
+      const layer = TOPOLOGY_LAYERS[getLayerForRole(n.role)];
+      if (layer) counts[layer.id] = (counts[layer.id] ?? 0) + 1;
+    }
+    return counts;
+  }, [nodes]);
+
+  /** Apply isolation — show only the isolated node + 1-hop neighbours */
+  const { displayNodes, displayEdges } = useMemo(() => {
+    let dNodes = nodes;
+    let dEdges = edges.filter(e => !e.edgeType || visibleEdgeTypes.has(e.edgeType));
+    if (isolatedNodeId) {
+      const neighborIds = new Set<string>([isolatedNodeId]);
+      for (const e of edges) {
+        if (e.source === isolatedNodeId) neighborIds.add(e.target);
+        if (e.target === isolatedNodeId) neighborIds.add(e.source);
+      }
+      dNodes = nodes.filter(n => neighborIds.has(n.id));
+      dEdges = dEdges.filter(e => neighborIds.has(e.source) && neighborIds.has(e.target));
+    }
+    return { displayNodes: dNodes, displayEdges: dEdges };
+  }, [nodes, edges, visibleEdgeTypes, isolatedNodeId]);
 
   return (
     <Flex flexDirection="column" gap={8} padding={0} style={{ height: '100%' }}>
@@ -76,6 +115,9 @@ export function Topology() {
           visibleEdgeTypes={visibleEdgeTypes}
           onToggleEdgeType={toggleEdgeType}
           edgeCounts={edgeCounts}
+          visibleLayers={visibleLayers}
+          onToggleLayer={toggleLayer}
+          layerNodeCounts={layerNodeCounts}
         />
 
         {error && (
@@ -88,30 +130,56 @@ export function Topology() {
           <div style={{ padding: 16, textAlign: 'center', color: '#888' }}>Loading topology…</div>
         )}
 
+        {isolatedNodeId && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8, padding: '4px 10px',
+            background: 'rgba(59,130,246,0.08)', borderRadius: 6, fontSize: 11, color: '#3B82F6',
+          }}>
+            <span>Isolated view — showing 1-hop neighbours of selected entity</span>
+            <button
+              onClick={() => setIsolatedNodeId(null)}
+              style={{
+                background: 'rgba(59,130,246,0.15)', border: 'none', borderRadius: 4,
+                color: '#3B82F6', cursor: 'pointer', padding: '2px 8px', fontSize: 11,
+              }}
+            >
+              Show All
+            </button>
+          </div>
+        )}
+
         <div ref={containerRef} style={{ flex: 1, minHeight: 400, position: 'relative' }}>
           {renderMode === '2d' ? (
             <TopologyMap
-              nodes={nodes}
-              edges={edges}
+              nodes={displayNodes}
+              edges={displayEdges}
               width={size.w}
               height={size.h}
               selectedNodeId={selectedNode?.id}
               onSelectNode={handleSelectNode}
               visibleEdgeTypes={visibleEdgeTypes}
+              visibleLayers={visibleLayers}
+              layoutMode={layoutMode}
             />
           ) : (
             <GraphScene3D
-              nodes={nodes}
-              edges={filteredEdges}
+              nodes={displayNodes}
+              edges={displayEdges}
               edgeCounts={edgeCounts}
               height={Math.max(size.h, 500)}
               selectedNodeId={selectedNode?.id}
               onNodeClick={handleSelectNode}
+              visibleLayers={visibleLayers}
             />
           )}
 
           {selectedNode && (
-            <NodeDetailPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
+            <NodeDetailPanel
+              node={selectedNode}
+              onClose={() => setSelectedNode(null)}
+              onIsolate={handleIsolate}
+              isIsolated={isolatedNodeId === selectedNode.id}
+            />
           )}
         </div>
 

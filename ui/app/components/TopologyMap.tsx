@@ -4,6 +4,7 @@
  */
 import React, { useRef, useState, useCallback, useMemo } from 'react';
 import type { TopologyNode, TopologyEdge, DeviceRole, TopologyEdgeType } from '../types/network';
+import { TOPOLOGY_LAYERS, getLayerForRole } from '../types/network';
 import { HEALTH_COLORS, percentBarColor } from '../utils';
 
 /* ── constants ─────────────────────────────────── */
@@ -18,7 +19,7 @@ const EDGE_COLOR: Record<TopologyEdgeType, string> = {
   flow: '#ffd54f',
   'runs-on': '#6b7280',
   calls: '#ff9800',
-  serves: '#e91e63',
+  serves: '#ff6e40',
   manual: '#6b7280',
 };
 
@@ -171,15 +172,17 @@ function Tooltip({ node, svgRect }: { node: TopologyNode; svgRect: DOMRect | nul
   return (
     <foreignObject x={tx} y={ty} width={TOOLTIP_W} height={TOOLTIP_H}>
       <div style={{
-        background: 'rgba(30,30,36,0.96)', border: '1px solid rgba(59,130,246,0.3)',
-        borderRadius: 8, padding: '8px 12px', color: '#e0e0e0', fontSize: 12, lineHeight: 1.5,
+        background: 'var(--dt-colors-background-surface-default, rgba(30,30,36,0.96))',
+        border: '1px solid var(--dt-colors-border-neutral-default, rgba(59,130,246,0.3))',
+        borderRadius: 8, padding: '8px 12px',
+        color: 'var(--dt-colors-text-neutral-default, #e0e0e0)', fontSize: 12, lineHeight: 1.5,
       }}>
         <div style={{ fontWeight: 700, marginBottom: 4, color: '#fff' }}>{node.label}</div>
         {node.ip && <div>IP: {node.ip}</div>}
         {node.type && <div>Type: {node.type}</div>}
         {node.cpu != null && <div>CPU: <span style={{ color: percentBarColor(node.cpu) }}>{node.cpu.toFixed(0)}%</span></div>}
         {node.memory != null && <div>Memory: <span style={{ color: percentBarColor(node.memory) }}>{node.memory.toFixed(0)}%</span></div>}
-        {node.location && <div>Sijainti: {node.location}</div>}
+        {node.location && <div>Location: {node.location}</div>}
       </div>
     </foreignObject>
   );
@@ -195,6 +198,10 @@ export interface TopologyMapProps {
   width?: number;
   height?: number;
   visibleEdgeTypes?: Set<TopologyEdgeType>;
+  /** Set of TOPOLOGY_LAYERS ids that are visible */
+  visibleLayers?: Set<string>;
+  /** Current layout mode — layer bands only appear in 'layered' */
+  layoutMode?: string;
 }
 
 export function TopologyMap({
@@ -205,6 +212,8 @@ export function TopologyMap({
   width = 960,
   height = 540,
   visibleEdgeTypes,
+  visibleLayers,
+  layoutMode,
 }: TopologyMapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hoveredNode, setHoveredNode] = useState<TopologyNode | null>(null);
@@ -215,10 +224,28 @@ export function TopologyMap({
 
   const nodeMap = useMemo(() => new Map(nodes.map(n => [n.id, n])), [nodes]);
 
+  /* ── Layer filtering ─── */
+  const visibleNodeIds = useMemo(() => {
+    if (!visibleLayers) return null; // all visible
+    const ids = new Set<string>();
+    for (const n of nodes) {
+      const layer = TOPOLOGY_LAYERS[getLayerForRole(n.role)];
+      if (layer && visibleLayers.has(layer.id)) ids.add(n.id);
+    }
+    return ids;
+  }, [nodes, visibleLayers]);
+
+  const displayNodes = useMemo(
+    () => visibleNodeIds ? nodes.filter(n => visibleNodeIds.has(n.id)) : nodes,
+    [nodes, visibleNodeIds],
+  );
+
   const filteredEdges = useMemo(() => {
-    if (!visibleEdgeTypes) return edges;
-    return edges.filter(e => !e.edgeType || visibleEdgeTypes.has(e.edgeType));
-  }, [edges, visibleEdgeTypes]);
+    let result = edges;
+    if (visibleEdgeTypes) result = result.filter(e => !e.edgeType || visibleEdgeTypes.has(e.edgeType));
+    if (visibleNodeIds) result = result.filter(e => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target));
+    return result;
+  }, [edges, visibleEdgeTypes, visibleNodeIds]);
 
   const handleNodeClick = useCallback((node: TopologyNode) => {
     onSelectNode?.(selectedNodeId === node.id ? null : node);
@@ -247,6 +274,14 @@ export function TopologyMap({
 
   const resetView = useCallback(() => { setPan({ x: 0, y: 0 }); setZoom(1); }, []);
 
+  /* Double-click a node → centre & zoom in */
+  const handleNodeDoubleClick = useCallback((node: TopologyNode) => {
+    const targetZoom = 2.2;
+    setPan({ x: width / 2 - node.x * targetZoom, y: height / 2 - node.y * targetZoom });
+    setZoom(targetZoom);
+    onSelectNode?.(node);
+  }, [width, height, onSelectNode]);
+
   const svgRect = svgRef.current?.getBoundingClientRect() ?? null;
 
   // Determine connected nodes for the selected node
@@ -268,9 +303,9 @@ export function TopologyMap({
   }, [nodes, edges]);
 
   return (
-    <div style={{ position: 'relative', width, height, overflow: 'hidden', borderRadius: 8, background: '#131317' }}>
+    <div style={{ position: 'relative', width, height, overflow: 'hidden', borderRadius: 8, background: 'var(--dt-colors-background-base-default, #131317)' }}>
       {/* Legend strip */}
-      <div style={{ position: 'absolute', top: 8, left: 8, display: 'flex', gap: 12, zIndex: 2, fontSize: 11, color: '#999' }}>
+      <div style={{ position: 'absolute', top: 8, left: 8, display: 'flex', gap: 12, zIndex: 2, fontSize: 11, color: 'var(--dt-colors-text-neutral-subdued, #999)' }}>
         {(['lldp', 'bgp', 'flow'] as TopologyEdgeType[]).map(t => (
           <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <span style={{ display: 'inline-block', width: 14, height: 3, borderRadius: 2, backgroundColor: EDGE_COLOR[t] }} />
@@ -313,13 +348,45 @@ export function TopologyMap({
           ))}
         </defs>
         <g transform={`translate(${pan.x},${pan.y}) scale(${zoom})`}>
+          {/* Layer bands — only in layered mode; Y matches roleLayeredLayout graph coords,
+              X spans the visible viewport so bands always stretch edge-to-edge */}
+          {layoutMode === 'layered' && (() => {
+            const BAND_PAD = 60; // must match PAD in layoutEngine
+            const numLayers = TOPOLOGY_LAYERS.length;
+            const bandH = (height - 2 * BAND_PAD) / numLayers;
+            // Viewport X span in graph coordinates
+            const vx = -pan.x / zoom;
+            const vw = width / zoom;
+            // Render reversed: apps (index 7) at visual row 0 (top)
+            return [...TOPOLOGY_LAYERS].reverse().map((layer, vi) => {
+              if (visibleLayers && !visibleLayers.has(layer.id)) return null;
+              const y = BAND_PAD + vi * bandH;
+              return (
+                <g key={layer.id}>
+                  <rect x={vx} y={y} width={vw} height={bandH}
+                    fill={layer.color} fillOpacity={0.08} />
+                  <line x1={vx} y1={y} x2={vx + vw} y2={y}
+                    stroke={layer.color} strokeOpacity={0.25} strokeDasharray="6 3" />
+                  <text x={vx + 6 / zoom} y={y + 14} fill={layer.color}
+                    fontSize={9 / zoom} opacity={0.7} fontWeight={600}>
+                    {layer.label}
+                  </text>
+                  <text x={vx + 6 / zoom} y={y + 24} fill={layer.color}
+                    fontSize={7 / zoom} opacity={0.45}>
+                    {layer.osiRef}
+                  </text>
+                </g>
+              );
+            });
+          })()}
+
           {/* Edges */}
           {filteredEdges.map((e, i) => (
             <EdgeLine key={`e-${i}`} edge={e} nodeMap={nodeMap} />
           ))}
 
           {/* Nodes */}
-          {nodes.map(n => {
+          {displayNodes.map(n => {
             const dimmed = selectedNodeId && selectedNodeId !== n.id && !connectedIds.has(n.id);
             return (
               <g
@@ -327,6 +394,7 @@ export function TopologyMap({
                 opacity={dimmed ? 0.25 : 1}
                 onMouseEnter={() => setHoveredNode(n)}
                 onMouseLeave={() => setHoveredNode(null)}
+                onDoubleClick={() => handleNodeDoubleClick(n)}
               >
                 <NodeShape node={n} selected={selectedNodeId === n.id} onClick={handleNodeClick} />
                 <text
@@ -376,7 +444,9 @@ export function TopologyMap({
 }
 
 const zoomBtnStyle: React.CSSProperties = {
-  width: 28, height: 28, borderRadius: 6, border: '1px solid rgba(255,255,255,0.12)',
-  background: 'rgba(30,30,36,0.85)', color: '#ddd', fontSize: 16,
+  width: 28, height: 28, borderRadius: 6,
+  border: '1px solid var(--dt-colors-border-neutral-default, rgba(255,255,255,0.12))',
+  background: 'var(--dt-colors-background-container-neutral-subdued, rgba(30,30,36,0.85))',
+  color: 'var(--dt-colors-text-neutral-default, #ddd)', fontSize: 16,
   cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
 };

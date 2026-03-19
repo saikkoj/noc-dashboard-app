@@ -13,16 +13,18 @@ import {
 import { ServiceCard } from '../components/ServiceCard';
 import { BandwidthUpgradeModal } from '../components/BandwidthUpgradeModal';
 import { ForecastChart } from '../components/ForecastChart';
-import { HEALTH_COLORS, BRAND_PRIMARY, formatTraffic, formatPct } from '../utils';
+import { HEALTH_COLORS, BRAND_PRIMARY, formatTraffic, formatPct, modeBadgeStyle } from '../utils';
+import { useDemoMode } from '../hooks/useDemoMode';
 
 export default function MyServices() {
+  const { demoMode } = useDemoMode();
   const navigate = useNavigate();
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [upgradeService, setUpgradeService] = useState<CustomerService | null>(null);
   const [forecastService, setForecastService] = useState<CustomerService | null>(null);
 
-  const services = DEMO_CUSTOMER_SERVICES;
-  const forecasts = DEMO_FORECASTS;
+  const services = demoMode ? DEMO_CUSTOMER_SERVICES : [];
+  const forecasts = demoMode ? DEMO_FORECASTS : [];
 
   const filtered = useMemo(() => {
     if (typeFilter === 'all') return services;
@@ -44,13 +46,25 @@ export default function MyServices() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Header with mode badge */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <span style={modeBadgeStyle(demoMode)}>{demoMode ? 'DEMO' : 'LIVE'}</span>
+      </div>
+
+      {!demoMode && services.length === 0 ? (
+        <div style={{ padding: 40, textAlign: 'center', color: '#888' }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>No service data available</div>
+          <div style={{ fontSize: 12 }}>Service data is provided in demo mode. Switch to Demo mode to see example data.</div>
+        </div>
+      ) : (
+        <>
       {/* KPI Strip */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12 }}>
         <KpiCard label="Services" value={`${activeServices}/${totalServices}`} sub="active" color="#3B82F6" />
         <KpiCard label="Avg SLA" value={formatPct(avgSla)} sub="achievement" color={avgSla >= 99.9 ? HEALTH_COLORS.healthy : HEALTH_COLORS.warning} />
         <KpiCard label="High Usage" value={`${highUsageCount}`} sub="services >75%" color={highUsageCount > 0 ? '#fd8232' : HEALTH_COLORS.healthy} />
         <KpiCard label="Forecast Warnings" value={`${forecasts.filter(f => f.daysUntilThreshold80 != null && f.daysUntilThreshold80 < 90 && f.daysUntilThreshold80 > 0).length}`} sub="under 90 days" color="#fd8232" />
-        <KpiCard label="Monthly Cost" value={`${totalMonthlyCost.toLocaleString('fi-FI')} €`} sub="total" color="#ccc" />
+        <KpiCard label="Monthly Cost" value={`${totalMonthlyCost.toLocaleString('en-US')} €`} sub="total" color="#ccc" />
       </div>
 
       {/* Filter bar */}
@@ -96,6 +110,8 @@ export default function MyServices() {
             setUpgradeService(svc);
           }}
         />
+      )}
+        </>
       )}
     </div>
   );

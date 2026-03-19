@@ -4,11 +4,11 @@
  * Presents network entities on distinct Z-depth layers following standard
  * network architecture hierarchy:
  *
- *   Layer 4 (top)     — Servers / Endpoints       "Palvelimet"
- *   Layer 3           — Switches / Distribution    "Kytkimet"
- *   Layer 2           — Firewalls / Security       "Firewallt"
- *   Layer 1           — Routers / Core             "Reitittimet"
- *   Layer 0 (bottom)  — Cloud Gateways / WAN       "Pilvi"
+ *   Layer 4 (top)     — Servers / Endpoints
+ *   Layer 3           — Switches / Distribution
+ *   Layer 2           — Firewalls / Security
+ *   Layer 1           — Routers / Core
+ *   Layer 0 (bottom)  — Cloud Gateways / WAN
  *
  * Each layer is visualized as a semi-transparent horizontal plane in 3D space,
  * with nodes rendered on their respective planes. This follows the established
@@ -28,6 +28,7 @@
 
 import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import type { TopologyNode, TopologyEdge, TopologyEdgeType, DeviceRole } from '../types/network';
+import { TOPOLOGY_LAYERS, getLayerForRole } from '../types/network';
 import { HEALTH_COLORS } from '../utils';
 
 /* ── Types ────────────────────────────────────────── */
@@ -48,6 +49,8 @@ export interface GraphScene3DProps {
   height?: number;
   selectedNodeId?: string | null;
   onNodeClick?: (node: TopologyNode) => void;
+  /** Set of TOPOLOGY_LAYERS ids that are visible */
+  visibleLayers?: Set<string>;
 }
 
 /* ── Constants ────────────────────────────────────── */
@@ -82,39 +85,14 @@ const ROLE_SHAPE: Record<DeviceRole, 'circle' | 'hexagon' | 'diamond' | 'square'
  * Logical Smartscape layers: Z-depth assignment by device role.
  * 8 layers, spaced 65 units apart for clear visual separation.
  */
-const ROLE_Z: Record<DeviceRole, number> = {
-  'cloud-gw': -230,
-  cloud:      -230,
-  router:     -165,
-  firewall:   -100,
-  switch:      -35,
-  server:       30,
-  host:         30,
-  'process-group': 95,
-  service:     160,
-  application: 225,
-  unknown:       0,
-};
+const ROLE_Z: Record<DeviceRole, number> = Object.fromEntries(
+  TOPOLOGY_LAYERS.flatMap(l => l.roles.map(r => [r, l.z]))
+) as Record<DeviceRole, number>;
 
-/** Layer metadata for rendering planes and legend */
-interface LayerMeta {
-  z: number;
-  label: string;
-  labelFi: string;
-  color: string;
-  roles: DeviceRole[];
-}
+/** Layer metadata for rendering planes and legend — derived from shared model */
+type LayerMeta = { z: number; label: string; color: string; roles: DeviceRole[] };
 
-const NETWORK_LAYERS: LayerMeta[] = [
-  { z: -230, label: 'Cloud / WAN',        labelFi: 'Pilvi / WAN',           color: '#4fc3f7', roles: ['cloud-gw', 'cloud'] },
-  { z: -165, label: 'Core / Routers',     labelFi: 'Ydin / Reitittimet',    color: '#2ab06f', roles: ['router'] },
-  { z: -100, label: 'Security',           labelFi: 'Tietoturva',            color: '#ef5350', roles: ['firewall', 'unknown'] },
-  { z:  -35, label: 'Distribution',       labelFi: 'Jakelu / Kytkimet',     color: '#ffd54f', roles: ['switch'] },
-  { z:   30, label: 'Hosts',              labelFi: 'Palvelimet / Hostit',   color: '#4dd0e1', roles: ['server', 'host'] },
-  { z:   95, label: 'Process Groups',     labelFi: 'Process Groups',        color: '#ab47bc', roles: ['process-group'] },
-  { z:  160, label: 'Services',           labelFi: 'Services',              color: '#ff7043', roles: ['service'] },
-  { z:  225, label: 'Applications',       labelFi: 'Sovellukset',           color: '#66bb6a', roles: ['application'] },
-];
+const NETWORK_LAYERS: LayerMeta[] = TOPOLOGY_LAYERS;
 
 const NODE_RADIUS_BASE = 9;
 const NEAR = 0.1;
@@ -201,12 +179,29 @@ function hexToRgb(hex: string): [number, number, number] {
 /* ── Component ────────────────────────────────────── */
 
 export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
-  nodes,
-  edges,
+  nodes: rawNodes,
+  edges: rawEdges,
   height = 600,
   selectedNodeId,
   onNodeClick,
+  visibleLayers,
 }) => {
+  /* ── Layer filtering ─── */
+  const nodes = useMemo(() => {
+    if (!visibleLayers) return rawNodes;
+    return rawNodes.filter(n => {
+      const layer = TOPOLOGY_LAYERS[getLayerForRole(n.role)];
+      return layer && visibleLayers.has(layer.id);
+    });
+  }, [rawNodes, visibleLayers]);
+
+  const visibleNodeIds = useMemo(() => new Set(nodes.map(n => n.id)), [nodes]);
+
+  const edges = useMemo(() => {
+    if (!visibleLayers) return rawEdges;
+    return rawEdges.filter(e => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target));
+  }, [rawEdges, visibleLayers, visibleNodeIds]);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cameraRef = useRef<Camera>({
@@ -242,11 +237,23 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
     const avgX = nodes.reduce((s, n) => s + n.x, 0) / nodes.length;
     const avgY = nodes.reduce((s, n) => s + n.y, 0) / nodes.length;
 
+    // Find the max extent so we can scale into the layer plane footprint
+    let maxExtentX = 1;
+    let maxExtentZ = 1;
+    for (const n of nodes) {
+      maxExtentX = Math.max(maxExtentX, Math.abs(n.x - avgX));
+      maxExtentZ = Math.max(maxExtentZ, Math.abs(n.y - avgY));
+    }
+    // Scale to fit within LAYER_PLANE_HALF_SIZE with some padding
+    const fitRadius = LAYER_PLANE_HALF_SIZE * 0.85;
+    const scaleX = fitRadius / maxExtentX;
+    const scaleZ = fitRadius / maxExtentZ;
+
     for (const n of nodes) {
       map.set(n.id, {
-        x: n.x - avgX,
-        y: -(n.y - avgY),
-        z: ROLE_Z[n.role] ?? 0,
+        x: (n.x - avgX) * scaleX,
+        y: ROLE_Z[n.role] ?? 0,
+        z: -(n.y - avgY) * scaleZ,
       });
     }
     return map;
@@ -355,7 +362,7 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
         ctx.fillStyle = lp.layer.color;
         ctx.font = '11px sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText(lp.layer.labelFi, lp.labelPos.sx, lp.labelPos.sy);
+        ctx.fillText(lp.layer.label, lp.labelPos.sx, lp.labelPos.sy);
       }
     }
     ctx.globalAlpha = 1;
@@ -906,7 +913,7 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
                 display: 'inline-block',
                 opacity: 0.8,
               }} />
-              <span>{layer.labelFi}</span>
+              <span>{layer.label}</span>
               <span style={{ opacity: 0.5 }}>({count})</span>
             </div>
           );
@@ -915,14 +922,14 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
 
       {/* Shape Legend */}
       <div style={{ ...legendStyle, top: 'auto', bottom: 120, left: 12, gap: 4 }}>
-        <div style={{ fontWeight: 600, marginBottom: 1, fontSize: 11 }}>Muodot</div>
+        <div style={{ fontWeight: 600, marginBottom: 1, fontSize: 11 }}>Shapes</div>
         {[
-          { shape: '⬡', label: 'Reititin / Service' },
+          { shape: '⬡', label: 'Router / Service' },
           { shape: '◇', label: 'Firewall' },
-          { shape: '■', label: 'Kytkin / Hosti' },
+          { shape: '■', label: 'Switch / Host' },
           { shape: '⬠', label: 'Process Group' },
-          { shape: '▲', label: 'Sovellus' },
-          { shape: '●', label: 'Pilvi / Unknown' },
+          { shape: '▲', label: 'Application' },
+          { shape: '●', label: 'Cloud / Unknown' },
         ].map(s => (
           <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span style={{ width: 12, textAlign: 'center', fontSize: 12 }}>{s.shape}</span>
@@ -935,9 +942,9 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
       <div style={{ position: 'absolute', bottom: 48, right: 16, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
         <button onClick={() => panCamera(0, PAN_KEY_STEP)} style={arrowBtnStyle} title="Up" aria-label="Pan Up">▲</button>
         <div style={{ display: 'flex', gap: 2 }}>
-          <button onClick={() => panCamera(PAN_KEY_STEP, 0)} style={arrowBtnStyle} title="Vasemmalle" aria-label="Pan Left">◀</button>
+          <button onClick={() => panCamera(PAN_KEY_STEP, 0)} style={arrowBtnStyle} title="Left" aria-label="Pan Left">◀</button>
           <button onClick={resetCamera} style={arrowBtnStyle} title="Reset View (Home)" aria-label="Reset View">⊞</button>
-          <button onClick={() => panCamera(-PAN_KEY_STEP, 0)} style={arrowBtnStyle} title="Oikealle" aria-label="Pan Right">▶</button>
+          <button onClick={() => panCamera(-PAN_KEY_STEP, 0)} style={arrowBtnStyle} title="Right" aria-label="Pan Right">▶</button>
         </div>
         <button onClick={() => panCamera(0, -PAN_KEY_STEP)} style={arrowBtnStyle} title="Down" aria-label="Pan Down">▼</button>
       </div>
@@ -970,7 +977,7 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
             fontSize: 14,
           }}
         >
-          Ei topologiadataa
+          No topology data
         </div>
       )}
     </div>

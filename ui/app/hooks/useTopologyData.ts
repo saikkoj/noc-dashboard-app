@@ -181,7 +181,7 @@ export function useTopologyData(
     for (const r of (hostsResult.data?.records ?? []) as any[]) {
       rawNodes.push({
         id: String(r.id ?? ''),
-        label: String(r['entity.name'] ?? 'Hosti'),
+        label: String(r['entity.name'] ?? 'Host'),
         role: 'host',
         health: mapHealth(r.state, toNum(r.problems)),
         cpu: toNum(r.cpuPct),
@@ -223,7 +223,7 @@ export function useTopologyData(
     for (const r of (appResult.data?.records ?? []) as any[]) {
       rawNodes.push({
         id: String(r.id ?? ''),
-        label: String(r['entity.name'] ?? 'Sovellus'),
+        label: String(r['entity.name'] ?? 'Application'),
         role: 'application',
         health: mapHealth(r.state, toNum(r.problems)),
         entityType: 'APPLICATION',

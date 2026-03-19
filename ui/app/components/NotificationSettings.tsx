@@ -8,12 +8,14 @@ import {
   NOTIFICATION_METRIC_LABELS,
   CHANNEL_LABELS,
 } from '../data/customerData';
+import { useDemoMode } from '../hooks/useDemoMode';
 
 type Channel = NotificationRule['channels'][number];
 
 const ALL_CHANNELS: Channel[] = ['email', 'sms', 'teams', 'webhook'];
 
 export function NotificationSettings() {
+  const { demoMode } = useDemoMode();
   const [rules, setRules] = useState<NotificationRule[]>(DEMO_NOTIFICATION_RULES);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -38,6 +40,8 @@ export function NotificationSettings() {
 
   const handleSave = () => setSaved(true);
 
+  const displayRules = demoMode ? rules : [];
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* Header */}
@@ -48,16 +52,20 @@ export function NotificationSettings() {
         </div>
         <button onClick={handleSave} style={{
           padding: '6px 16px', borderRadius: 6, border: 'none', cursor: 'pointer',
-          background: saved ? '#2ab06f' : '#FF2D8D', color: '#fff', fontSize: 12, fontWeight: 600,
+          background: saved ? '#2ab06f' : '#3B82F6', color: '#fff', fontSize: 12, fontWeight: 600,
           transition: 'background 0.3s',
         }}>
           {saved ? '✓ Saved' : 'Save changes'}
         </button>
       </div>
 
-      {/* Rules */}
+      {!demoMode && displayRules.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: 32, color: '#888', fontSize: 13 }}>
+          Notification settings are not available in live mode.
+        </div>
+      ) : (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {rules.map(rule => {
+        {displayRules.map(rule => {
           const isExpanded = expandedId === rule.id;
           const metricLabel = NOTIFICATION_METRIC_LABELS[rule.metric] ?? rule.metric;
           return (
@@ -92,8 +100,8 @@ export function NotificationSettings() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 13, fontWeight: 600, opacity: rule.enabled ? 1 : 0.5 }}>{metricLabel}</div>
                   <div style={{ fontSize: 10, color: '#777' }}>
-                    Raja: {rule.thresholdPct}% · {rule.channels.map(c => CHANNEL_LABELS[c]).join(', ')}
-                    {rule.autoEscalate && ' · Auto-eskalaatio'}
+                    Threshold: {rule.thresholdPct}% · {rule.channels.map(c => CHANNEL_LABELS[c]).join(', ')}
+                    {rule.autoEscalate && ' · Auto-escalation'}
                   </div>
                 </div>
 
@@ -122,7 +130,7 @@ export function NotificationSettings() {
 
                   {/* Channels */}
                   <div>
-                    <div style={{ fontSize: 11, color: '#999', marginBottom: 6 }}>Ilmoituskanavat</div>
+                    <div style={{ fontSize: 11, color: '#999', marginBottom: 6 }}>Notification channels</div>
                     <div style={{ display: 'flex', gap: 6 }}>
                       {ALL_CHANNELS.map(ch => {
                         const active = rule.channels.includes(ch);
@@ -171,7 +179,7 @@ export function NotificationSettings() {
                       }} />
                     </span>
                     <div>
-                      <div style={{ fontSize: 12, color: '#ccc' }}>Automaattinen eskalaatio</div>
+                      <div style={{ fontSize: 12, color: '#ccc' }}>Auto-escalation</div>
                       <div style={{ fontSize: 10, color: '#666' }}>Auto-create ticket if alert is not acknowledged</div>
                     </div>
                   </div>
@@ -181,6 +189,7 @@ export function NotificationSettings() {
           );
         })}
       </div>
+      )}
     </div>
   );
 }

@@ -118,7 +118,7 @@ export const DEMO_CUSTOMER_SERVICES: CustomerService[] = [
     type: 'sd-wan',
     status: 'active',
     siteId: 'site-newyork-dc',
-    siteName: 'All kohteet',
+    siteName: 'All sites',
     orderedBandwidthMbps: 2000,
     currentUsageMbps: 1100,
     peakUsageMbps: 1650,
@@ -155,7 +155,7 @@ export const DEMO_CUSTOMER_SERVICES: CustomerService[] = [
     type: 'dns-dhcp',
     status: 'degraded',
     siteId: 'site-newyork-dc',
-    siteName: 'All kohteet',
+    siteName: 'All sites',
     orderedBandwidthMbps: 0,
     currentUsageMbps: 0,
     peakUsageMbps: 0,
@@ -249,7 +249,7 @@ export const DEMO_TICKETS: SupportTicket[] = [
   {
     id: 'TKT-2026-0142',
     title: 'Denver North — complete connection outage',
-    description: 'MPLS WAN -yhteys New York–Denver on kokonaan poikki. All 20 devices tavoittamattomia.',
+    description: 'MPLS WAN connection New York–Denver is completely down. All 20 devices unreachable.',
     category: 'incident',
     priority: 'critical',
     status: 'in-progress',
@@ -300,7 +300,7 @@ export const DEMO_TICKETS: SupportTicket[] = [
     updatedAt: new Date(Date.now() - 20 * 60_000).toISOString(),
     assignee: 'DNS Team',
     messages: [
-      { id: 'msg-8', author: 'System', authorRole: 'system', content: 'DNS error rate exceeded threshold: 2.3% (raja 1%).', timestamp: new Date(Date.now() - 95 * 60_000).toISOString() },
+      { id: 'msg-8', author: 'System', authorRole: 'system', content: 'DNS error rate exceeded threshold: 2.3% (threshold 1%).', timestamp: new Date(Date.now() - 95 * 60_000).toISOString() },
       { id: 'msg-9', author: 'DNS Team', authorRole: 'support', content: 'Backup server activated. Investigating root cause on primary server.', timestamp: new Date(Date.now() - 60 * 60_000).toISOString() },
     ],
     relatedIncidentIds: ['inc-dns-failures'],
@@ -344,7 +344,7 @@ export const DEMO_TICKETS: SupportTicket[] = [
   {
     id: 'TKT-2026-0118',
     title: 'BGP Session Recovery — resolved',
-    description: 'New York DC:n BGP-sessio upstream-operaattoriin katkesi hetkeksi.',
+    description: 'New York DC BGP session to upstream provider went down briefly.',
     category: 'incident',
     priority: 'low',
     status: 'closed',
@@ -357,7 +357,7 @@ export const DEMO_TICKETS: SupportTicket[] = [
     resolvedAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
     assignee: 'NOC Team',
     messages: [
-      { id: 'msg-12', author: 'System', authorRole: 'system', content: 'BGP-sessio alhaalla 12 sekuntia. Palautui automaattisesti.', timestamp: new Date(Date.now() - 6 * 3600_000).toISOString() },
+      { id: 'msg-12', author: 'System', authorRole: 'system', content: 'BGP session down for 12 seconds. Recovered automatically.', timestamp: new Date(Date.now() - 6 * 3600_000).toISOString() },
       { id: 'msg-13', author: 'NOC Team', authorRole: 'support', content: 'Analyzed: brief recovery via route-flap dampening mechanism. No further action needed.', timestamp: new Date(Date.now() - 5 * 3600_000).toISOString() },
     ],
     relatedIncidentIds: ['inc-helsinki-bgp'],
@@ -377,7 +377,7 @@ export const DEMO_NOTIFICATION_RULES: NotificationRule[] = [
   { id: 'notif-errors', name: 'Interface errors over 100/min', enabled: true, metric: 'errors', thresholdPct: 100, channels: ['teams'], cooldownMinutes: 15, autoEscalate: false },
 ];
 
-/* ── Service type labels (Finnish) ─────────────── */
+/* ── Service type labels ───────────────────────── */
 
 export const SERVICE_TYPE_LABELS: Record<string, string> = {
   'internet': 'Internet Connection',
@@ -385,8 +385,8 @@ export const SERVICE_TYPE_LABELS: Record<string, string> = {
   'sd-wan': 'SD-WAN',
   'dns-dhcp': 'DNS / DHCP',
   'firewall': 'Firewall',
-  'colocation': 'Konesali',
-  'cloud-connect': 'Pilviyhteys',
+  'colocation': 'Colocation',
+  'cloud-connect': 'Cloud Connect',
 };
 
 export const SERVICE_STATUS_LABELS: Record<string, { label: string; color: string }> = {
@@ -400,26 +400,26 @@ export const SERVICE_STATUS_LABELS: Record<string, { label: string; color: strin
 export const TICKET_STATUS_LABELS: Record<string, { label: string; color: string }> = {
   'open': { label: 'Open', color: '#3B82F6' },
   'in-progress': { label: 'In Progress', color: '#ffd54f' },
-  'waiting-customer': { label: 'Pending asiakasta', color: '#fd8232' },
-  'resolved': { label: 'Ratkaistu', color: '#2ab06f' },
+  'waiting-customer': { label: 'Waiting on Customer', color: '#fd8232' },
+  'resolved': { label: 'Resolved', color: '#2ab06f' },
   'closed': { label: 'Closed', color: '#6b7280' },
 };
 
 export const TICKET_PRIORITY_LABELS: Record<string, { label: string; color: string }> = {
   critical: { label: 'Critical', color: '#dc172a' },
-  high: { label: 'Korkea', color: '#fd8232' },
+  high: { label: 'High', color: '#fd8232' },
   medium: { label: 'Normal', color: '#ffd54f' },
-  low: { label: 'Matala', color: '#6b7280' },
+  low: { label: 'Low', color: '#6b7280' },
 };
 
 export const NOTIFICATION_METRIC_LABELS: Record<string, string> = {
   'bandwidth-usage': 'Bandwidth Usage',
-  'latency': 'Viive (ms)',
+  'latency': 'Latency (ms)',
   'packet-loss': 'Packet Loss (%)',
-  'availability': 'Saatavuus (%)',
+  'availability': 'Availability (%)',
   'cpu': 'CPU Usage (%)',
   'memory': 'Memory Usage (%)',
-  'errors': 'Rajapintavirheet (/min)',
+  'errors': 'Interface Errors (/min)',
 };
 
 export const CHANNEL_LABELS: Record<string, string> = {

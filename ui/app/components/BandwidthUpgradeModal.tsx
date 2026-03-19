@@ -70,10 +70,10 @@ export function BandwidthUpgradeModal({ service, onClose, onSubmit }: Props) {
               <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>Current Service</div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
                 <span style={{ color: '#ccc' }}>{SERVICE_TYPE_LABELS[service.type]}: {formatTraffic(service.orderedBandwidthMbps / 1000)}</span>
-                <span style={{ color: '#888' }}>{service.monthlyCostEur.toLocaleString('fi-FI')} €/kk</span>
+                <span style={{ color: '#888' }}>{service.monthlyCostEur.toLocaleString('en-US')} €/mo</span>
               </div>
               <div style={{ fontSize: 11, color: '#fd8232', marginTop: 4 }}>
-                Usage: {((service.currentUsageMbps / service.orderedBandwidthMbps) * 100).toFixed(0)}% · Huippu: {((service.peakUsageMbps / service.orderedBandwidthMbps) * 100).toFixed(0)}%
+                Usage: {((service.currentUsageMbps / service.orderedBandwidthMbps) * 100).toFixed(0)}% · Peak: {((service.peakUsageMbps / service.orderedBandwidthMbps) * 100).toFixed(0)}%
               </div>
             </div>
 
@@ -105,7 +105,7 @@ export function BandwidthUpgradeModal({ service, onClose, onSubmit }: Props) {
                     }}
                   >
                     <div style={{ fontWeight: 600 }}>{tier.label}</div>
-                    <div style={{ fontSize: 10, color: '#888', marginTop: 2 }}>{tier.priceEur.toLocaleString('fi-FI')} €/kk</div>
+                    <div style={{ fontSize: 10, color: '#888', marginTop: 2 }}>{tier.priceEur.toLocaleString('en-US')} €/mo</div>
                   </button>
                 ))}
               </div>
@@ -126,7 +126,7 @@ export function BandwidthUpgradeModal({ service, onClose, onSubmit }: Props) {
                         background: tempDays === d ? 'rgba(59,130,246,0.12)' : 'transparent',
                         color: tempDays === d ? '#3B82F6' : '#999',
                       }}
-                    >{d} pv</button>
+                    >{d} days</button>
                   ))}
                 </div>
               </div>
@@ -137,13 +137,13 @@ export function BandwidthUpgradeModal({ service, onClose, onSubmit }: Props) {
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
                 <span style={{ color: '#ccc' }}>New Price</span>
                 <span style={{ color: '#fff', fontWeight: 700 }}>
-                  {(selectedTier?.priceEur ?? 0).toLocaleString('fi-FI')} €/kk
-                  {temporary && <span style={{ color: '#888', fontWeight: 400 }}> × {tempDays} pv</span>}
+                  {(selectedTier?.priceEur ?? 0).toLocaleString('en-US')} €/mo
+                  {temporary && <span style={{ color: '#888', fontWeight: 400 }}> × {tempDays} days</span>}
                 </span>
               </div>
               {!temporary && priceDiff > 0 && (
                 <div style={{ fontSize: 11, color: '#fd8232', marginTop: 4 }}>
-                  +{priceDiff.toLocaleString('fi-FI')} €/kk additional
+                  +{priceDiff.toLocaleString('en-US')} €/mo additional
                 </div>
               )}
             </div>
@@ -179,7 +179,7 @@ export function BandwidthUpgradeModal({ service, onClose, onSubmit }: Props) {
 
 const btnPrimary: React.CSSProperties = {
   padding: '10px 20px', borderRadius: 8, border: 'none',
-  background: '#FF2D8D', color: '#fff', cursor: 'pointer',
+  background: '#3B82F6', color: '#fff', cursor: 'pointer',
   fontSize: 13, fontWeight: 600,
 };
 

@@ -11,19 +11,23 @@ import {
   SERVICE_TYPE_LABELS,
 } from '../data/customerData';
 import { formatAge, BRAND_PRIMARY } from '../utils';
+import { useDemoMode } from '../hooks/useDemoMode';
 
 /* ---------- Ticket List ---------- */
 
 export function TicketManager() {
+  const { demoMode } = useDemoMode();
   const [tickets, setTickets] = useState<SupportTicket[]>(DEMO_TICKETS);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
 
+  const displayTickets = demoMode ? tickets : [];
+
   const filtered = useMemo(() => {
-    if (statusFilter === 'all') return tickets;
-    return tickets.filter(t => t.status === statusFilter);
-  }, [tickets, statusFilter]);
+    if (statusFilter === 'all') return displayTickets;
+    return displayTickets.filter(t => t.status === statusFilter);
+  }, [displayTickets, statusFilter]);
 
   const selectedTicket = tickets.find(t => t.id === selectedId) ?? null;
 
@@ -35,6 +39,13 @@ export function TicketManager() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, height: '100%' }}>
+      {!demoMode && displayTickets.length === 0 ? (
+        <div style={{ padding: 40, textAlign: 'center', color: '#888' }}>
+          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>No ticket data available</div>
+          <div style={{ fontSize: 12 }}>Ticket management is provided in demo mode. Switch to Demo mode to see example data.</div>
+        </div>
+      ) : (
+        <>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: 6 }}>
@@ -42,7 +53,7 @@ export function TicketManager() {
             const isActive = statusFilter === s;
             const meta = TICKET_STATUS_LABELS[s];
             const label = s === 'all' ? 'All' : (meta?.label ?? s);
-            const count = s === 'all' ? tickets.length : tickets.filter(t => t.status === s).length;
+            const count = s === 'all' ? displayTickets.length : displayTickets.filter(t => t.status === s).length;
             return (
               <button
                 key={s}
@@ -85,6 +96,8 @@ export function TicketManager() {
 
       {/* Create modal */}
       {showCreate && <CreateTicketModal onClose={() => setShowCreate(false)} onCreate={handleCreate} />}
+        </>
+      )}
     </div>
   );
 }
@@ -151,13 +164,13 @@ function TicketDetail({ ticket, onClose }: { ticket: SupportTicket; onClose: () 
       {/* Meta */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
         <MetaItem label="Service" value={ticket.serviceName ?? '—'} />
-        <MetaItem label="Luotu" value={new Date(ticket.createdAt).toLocaleDateString('fi-FI')} />
-        {ticket.resolvedAt && <MetaItem label="Ratkaistu" value={new Date(ticket.resolvedAt).toLocaleDateString('fi-FI')} />}
-        <MetaItem label="Viestit" value={`${ticket.messages.length}`} />
+        <MetaItem label="Created" value={new Date(ticket.createdAt).toLocaleDateString('en-US')} />
+        {ticket.resolvedAt && <MetaItem label="Resolved" value={new Date(ticket.resolvedAt).toLocaleDateString('en-US')} />}
+        <MetaItem label="Messages" value={`${ticket.messages.length}`} />
       </div>
 
       {/* Messages */}
-      <div style={{ fontSize: 11, fontWeight: 600, color: '#888', marginBottom: 8 }}>Viestit</div>
+      <div style={{ fontSize: 11, fontWeight: 600, color: '#888', marginBottom: 8 }}>Messages</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {ticket.messages.map(m => (
           <MessageBubble key={m.id} message={m} />
@@ -177,7 +190,7 @@ function MessageBubble({ message }: { message: TicketMessage }) {
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#666', marginBottom: 4 }}>
         <span>{isCustomer ? 'You' : 'NOC Support'}</span>
-        <span>{new Date(message.timestamp).toLocaleString('fi-FI', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+        <span>{new Date(message.timestamp).toLocaleString('en-US', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
       </div>
       <div style={{ color: '#ccc' }}>{message.content}</div>
     </div>
@@ -197,16 +210,16 @@ function MetaItem({ label, value }: { label: string; value: string }) {
 
 const CATEGORIES: { value: SupportTicket['category']; label: string }[] = [
   { value: 'incident', label: 'Incident Report' },
-  { value: 'bandwidth-request', label: 'Kaistanleveys' },
-  { value: 'configuration', label: 'Konfiguraatio' },
-  { value: 'billing', label: 'Laskutus' },
-  { value: 'general', label: 'Muu' },
+  { value: 'bandwidth-request', label: 'Bandwidth' },
+  { value: 'configuration', label: 'Configuration' },
+  { value: 'billing', label: 'Billing' },
+  { value: 'general', label: 'Other' },
 ];
 
 const PRIORITIES: { value: SupportTicket['priority']; label: string; color: string }[] = [
-  { value: 'low', label: 'Matala', color: '#2ab06f' },
+  { value: 'low', label: 'Low', color: '#2ab06f' },
   { value: 'medium', label: 'Normal', color: '#3B82F6' },
-  { value: 'high', label: 'Korkea', color: '#fd8232' },
+  { value: 'high', label: 'High', color: '#fd8232' },
   { value: 'critical', label: 'Critical', color: '#dc172a' },
 ];
 

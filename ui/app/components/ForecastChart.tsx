@@ -50,7 +50,7 @@ function MiniSvgChart({ forecast, orderedMbps, width, height }: {
   // Month labels
   const months = pts.map(p => {
     const d = new Date(p.timestamp);
-    return d.toLocaleDateString('fi-FI', { month: 'short' });
+    return d.toLocaleDateString('en-US', { month: 'short' });
   });
 
   return (
@@ -91,7 +91,7 @@ function MiniSvgChart({ forecast, orderedMbps, width, height }: {
       {/* "Now" marker */}
       <line x1={xScale(0)} y1={padTop} x2={xScale(0)} y2={padTop + chartH}
         stroke="rgba(255,255,255,0.2)" strokeWidth={1} strokeDasharray="3 3" />
-      <text x={xScale(0)} y={padTop + chartH + 14} textAnchor="middle" fill="#888" fontSize={9}>Nyt</text>
+      <text x={xScale(0)} y={padTop + chartH + 14} textAnchor="middle" fill="#888" fontSize={9}>Now</text>
 
       {/* Month labels */}
       {months.map((m, i) => i > 0 && i % 2 === 0 ? (
@@ -109,7 +109,7 @@ function MiniSvgChart({ forecast, orderedMbps, width, height }: {
 
 export function ForecastChart({ service, forecast, onClose, onUpgrade }: Props) {
   const exhaustionDate = forecast.predictedExhaustionDate
-    ? new Date(forecast.predictedExhaustionDate).toLocaleDateString('fi-FI')
+    ? new Date(forecast.predictedExhaustionDate).toLocaleDateString('en-US')
     : null;
 
   return (
@@ -133,13 +133,13 @@ export function ForecastChart({ service, forecast, onClose, onUpgrade }: Props) 
 
         {/* KPI summary */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 16 }}>
-          <KpiBlock label="Usageaste" value={`${forecast.currentUsagePct.toFixed(0)}%`}
+          <KpiBlock label="Usage" value={`${forecast.currentUsagePct.toFixed(0)}%`}
             color={forecast.currentUsagePct > 80 ? '#dc172a' : forecast.currentUsagePct > 60 ? '#fd8232' : '#2ab06f'} />
-          <KpiBlock label="Growth Rate" value={`${forecast.growthRatePctPerMonth.toFixed(1)}%/kk`} color="#3B82F6" />
+          <KpiBlock label="Growth Rate" value={`${forecast.growthRatePctPerMonth.toFixed(1)}%/mo`} color="#3B82F6" />
           <KpiBlock
             label="80% Threshold"
             value={forecast.daysUntilThreshold80 != null && forecast.daysUntilThreshold80 > 0
-              ? `${forecast.daysUntilThreshold80} pv` : forecast.daysUntilThreshold80 === 0 ? 'Exceeded!' : '—'}
+              ? `${forecast.daysUntilThreshold80} days` : forecast.daysUntilThreshold80 === 0 ? 'Exceeded!' : '—'}
             color={forecast.daysUntilThreshold80 != null && forecast.daysUntilThreshold80 < 60 ? '#fd8232' : '#2ab06f'}
           />
           <KpiBlock
@@ -161,7 +161,7 @@ export function ForecastChart({ service, forecast, onClose, onUpgrade }: Props) 
             background: `${BRAND_PRIMARY}12`, border: `1px solid ${BRAND_PRIMARY}30`,
           }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 4 }}>
-              💡 Suositus: Nosta kaistaa → {formatTraffic(forecast.recommendedUpgradeMbps / 1000)}
+              💡 Recommendation: Upgrade bandwidth → {formatTraffic(forecast.recommendedUpgradeMbps / 1000)}
             </div>
             <div style={{ fontSize: 11, color: '#ccc' }}>
               At the current growth rate ({forecast.growthRatePctPerMonth}%/mo) capacity will be insufficient
@@ -171,7 +171,7 @@ export function ForecastChart({ service, forecast, onClose, onUpgrade }: Props) 
               marginTop: 8, padding: '8px 16px', borderRadius: 6, border: 'none',
               background: BRAND_PRIMARY, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600,
             }}>
-              Statusa {formatTraffic(forecast.recommendedUpgradeMbps / 1000)}
+              Request {formatTraffic(forecast.recommendedUpgradeMbps / 1000)}
             </button>
           </div>
         )}

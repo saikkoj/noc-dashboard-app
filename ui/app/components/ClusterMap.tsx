@@ -223,7 +223,7 @@ function SiteMap({ sites, regionLabel, region, onBack }: SiteMapProps) {
 
       {/* KPI strip */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
-        <KpiBadge label="Laitteet" value={region.deviceCount} />
+        <KpiBadge label="Devices" value={region.deviceCount} />
         <KpiBadge label="Alerts" value={region.alertCount ?? 0} alert={region.alertCount > 0} />
         <KpiBadge label="Sites" value={sites.length} />
         <KpiBadge label="Avg CPU" value={`${region.avgCpu ?? 0}%`} />
@@ -311,35 +311,43 @@ export function ClusterMap({ regions, sites, selectedRegion, onSelectRegion, onB
   const containerRef = useRef<HTMLDivElement>(null);
 
   const toggleFullscreen = useCallback(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    if (!document.fullscreenElement) {
-      el.requestFullscreen().then(() => setIsFullscreen(true)).catch(() => {});
-    } else {
-      document.exitFullscreen().then(() => setIsFullscreen(false)).catch(() => {});
-    }
+    setIsFullscreen(prev => !prev);
   }, []);
 
+  // Lock body scroll while fullscreen & allow Escape to exit
   useEffect(() => {
-    const handler = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener('fullscreenchange', handler);
-    return () => document.removeEventListener('fullscreenchange', handler);
-  }, []);
+    if (!isFullscreen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsFullscreen(false); };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [isFullscreen]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: '100%',
-        height: '100%',
-        borderRadius: isFullscreen ? 0 : 8,
-        overflow: 'hidden',
-        background: '#131317',
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
+      {/* Placeholder keeps parent height when the map goes fixed */}
+      {isFullscreen && <div style={{ width: '100%', height: '100%' }} />}
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: isFullscreen ? 0 : 8,
+          overflow: 'hidden',
+          background: '#131317',
+          position: isFullscreen ? 'fixed' : 'absolute',
+          top: 0,
+          left: 0,
+          right: isFullscreen ? 0 : undefined,
+          bottom: isFullscreen ? 0 : undefined,
+          zIndex: isFullscreen ? 9999 : undefined,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
       {selectedRegion ? (
         <SiteMap sites={sites} regionLabel={selectedRegion.label} region={selectedRegion} onBack={onBack} />
       ) : (
@@ -362,6 +370,7 @@ export function ClusterMap({ regions, sites, selectedRegion, onSelectRegion, onB
       >
         {isFullscreen ? '✕' : '⛶'}
       </button>
+      </div>
     </div>
   );
 }

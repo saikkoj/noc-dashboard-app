@@ -30,6 +30,10 @@ const REGION_COORDS: Record<string, { lat: number; lon: number }> = {
   Seattle: { lat: 47.61, lon: -122.33 },
   Dallas: { lat: 32.78, lon: -96.80 },
   Phoenix: { lat: 33.45, lon: -112.07 },
+  Sydney: { lat: -33.87, lon: 151.21 },
+  Melbourne: { lat: -37.81, lon: 144.96 },
+  Auckland: { lat: -36.85, lon: 174.76 },
+  Wellington: { lat: -41.29, lon: 174.78 },
 };
 
 function groupByRegion(records: Record<string, unknown>[]): TopologyCluster[] {

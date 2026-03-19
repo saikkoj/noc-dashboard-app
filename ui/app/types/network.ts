@@ -82,6 +82,51 @@ export type DeviceRole =
   | 'application'              // Layer 7 — Applications / Synthetic
   | 'unknown';
 
+/* ── Shared topology layer model ───────────────────── */
+
+/**
+ * Maps Dynatrace Smartscape entity roles to an OSI-inspired layer stack.
+ *
+ * Ordering follows the data-flow path from the external network to the
+ * end-user application, which matches both the standard NOC "outside-in"
+ * view and the Dynatrace Smartscape dependency hierarchy:
+ *
+ *   L0  Cloud / WAN        — WAN / Internet ingress         (OSI L1-L2)
+ *   L1  Core / Routers     — IP routing decisions            (OSI L3)
+ *   L2  Security           — Firewall packet filtering       (OSI L3-L4)
+ *   L3  Distribution       — Switching / access layer        (OSI L2)
+ *   L4  Hosts              — Physical / VM compute           (Infrastructure)
+ *   L5  Process Groups     — OS-level runtimes               (Runtime)
+ *   L6  Services           — Business-logic endpoints        (OSI L5-L7)
+ *   L7  Applications       — End-user facing apps            (OSI L7)
+ */
+export interface TopologyLayer {
+  id: string;
+  label: string;
+  osiRef: string;
+  color: string;
+  roles: DeviceRole[];
+  /** Z-depth position for the 3D view (bottom = negative, top = positive) */
+  z: number;
+}
+
+export const TOPOLOGY_LAYERS: TopologyLayer[] = [
+  { id: 'cloud',        label: 'Cloud / WAN',    osiRef: 'OSI L1-L2',  color: '#4fc3f7', z: -315, roles: ['cloud-gw', 'cloud'] },
+  { id: 'core',         label: 'Core / Routers',  osiRef: 'OSI L3',     color: '#2ab06f', z: -225, roles: ['router'] },
+  { id: 'security',     label: 'Security',        osiRef: 'OSI L3-L4',  color: '#ef5350', z: -135, roles: ['firewall'] },
+  { id: 'distribution', label: 'Distribution',    osiRef: 'OSI L2',     color: '#ffd54f', z:  -45, roles: ['switch'] },
+  { id: 'hosts',        label: 'Hosts',           osiRef: 'Infra',      color: '#4dd0e1', z:   45, roles: ['server', 'host', 'unknown'] },
+  { id: 'processes',    label: 'Process Groups',  osiRef: 'Runtime',    color: '#ab47bc', z:  135, roles: ['process-group'] },
+  { id: 'services',     label: 'Services',        osiRef: 'OSI L5-L7',  color: '#ff7043', z:  225, roles: ['service'] },
+  { id: 'applications', label: 'Applications',    osiRef: 'OSI L7',     color: '#66bb6a', z:  315, roles: ['application'] },
+];
+
+/** Reverse lookup: DeviceRole → layer index (0-based) */
+export function getLayerForRole(role: DeviceRole): number {
+  const idx = TOPOLOGY_LAYERS.findIndex(l => l.roles.includes(role));
+  return idx >= 0 ? idx : 4; // default to hosts
+}
+
 /** Edge relationship types across the full topology */
 export type TopologyEdgeType =
   | 'lldp' | 'bgp' | 'flow'   // Network layer
@@ -196,6 +241,24 @@ export interface TopologySite {
 }
 
 export type DrillDownLevel = 'country' | 'region' | 'site';
+
+/* ── Davis problem (alert) types ────────────────────── */
+
+export type DavisProblemSeverity = 'AVAILABILITY' | 'ERROR' | 'SLOWDOWN' | 'RESOURCE' | 'CUSTOM_ALERT';
+export type DavisProblemStatus = 'OPEN' | 'CLOSED';
+
+export interface DavisProblem {
+  problemId: string;
+  displayId: string;
+  title: string;
+  severity: DavisProblemSeverity;
+  status: DavisProblemStatus;
+  startTime: string;
+  endTime?: string;
+  affectedEntities: string[];
+  rootCauseEntity?: string;
+  managementZone?: string;
+}
 
 /* ── Customer service portal types ──────────────────── */
 
