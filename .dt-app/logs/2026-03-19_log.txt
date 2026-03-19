@@ -1,0 +1,37 @@
+2026-03-19T08:16:59.172Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-19T08:16:59.172Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-19T08:17:00.761Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D023a515b-b0bf-4708-bd86-d5cb79e0ce81&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-19T08:17:00.761Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-19T08:17:00.762Z DEBUG [AUTH] OAuth2 token expired with a value of: -57259.762 seconds
+2026-03-19T08:17:00.957Z DEBUG [AUTH] Refresh process for token toolkit has failed with: Error: Invalid OAuth2 request. UNSUCCESSFUL_OAUTH_REFRESH_TOKEN_VALIDATION_FAILED | RefreshToken: '******8ba2f315' for clientId: 'dt0s08.dt-app-local' doesn't exist. (traceId: PCFTGWHC7TSRR6LM). Proceeding with SSO flow instead.
+2026-03-19T08:17:00.958Z DEBUG [AUTH] Authenticate with Dynatrace SSO
+2026-03-19T08:17:01.452Z DEBUG [AUTH] SSO-link https://sso.dynatrace.com/oauth2/authorize?client_id=dt0s08.dt-app-local&redirect_uri=http%3A%2F%2Flocalhost%3A5345%2Fauth%2Flogin&state=a1941f33f2d4da4833d7eb576e29bceaaa3dd287&response_type=code&code_challenge_method=S256&code_challenge=_LJbREAYe7jZH24wfrTdEhFtXXTljRhPHkeoTE0nK-0
+2026-03-19T08:17:02.846Z DEBUG [AUTH] Received authorized code for oAuth
+2026-03-19T08:17:03.846Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-19T08:17:03.846Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-19T08:17:03.846Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "231129885453988700"
+2026-03-19T08:17:03.847Z DEBUG [TELEMETRY] Identification successful
+2026-03-19T08:17:15.945Z DEBUG [BUILD_TIME] Built UI in 7158.587583ms.
+2026-03-19T08:17:15.946Z DEBUG [BUILD_TIME] Built in 11832.508458ms.
+2026-03-19T08:17:15.947Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/main.js (3221.04 KB)
+2026-03-19T08:17:15.947Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/main.css (479.38 KB)
+2026-03-19T08:17:15.947Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/index.html (0.51 KB)
+2026-03-19T08:17:15.986Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+
+2026-03-19T08:17:16.023Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-19T08:17:16.023Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D023a515b-b0bf-4708-bd86-d5cb79e0ce81&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-19T08:17:16.023Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-19T08:17:16.023Z DEBUG [DEPLOY] Installing the app
+2026-03-19T08:17:17.500Z DEBUG [DEPLOY] App installed
+2026-03-19T08:17:18.549Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-19T08:17:19.097Z DEBUG [TELEMETRY] Successfully closed OpenKit connection

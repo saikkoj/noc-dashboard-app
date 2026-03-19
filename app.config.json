@@ -1,0 +1,59 @@
+{
+  "environmentUrl": "https://bnk46244.apps.dynatrace.com/",
+  "app": {
+    "name": "NOC Dashboard",
+    "version": "0.1.0",
+    "description": "NOC Dashboard \u2014 digital advisor for your network",
+    "id": "my.noc.dashboard",
+    "scopes": [
+      {
+        "name": "storage:logs:read",
+        "comment": "required for log queries"
+      },
+      {
+        "name": "storage:buckets:read",
+        "comment": "default template"
+      },
+      {
+        "name": "storage:events:read",
+        "comment": "required for dt.davis.problems queries"
+      },
+      {
+        "name": "storage:bizevents:read",
+        "comment": "required for bizevent queries"
+      },
+      {
+        "name": "storage:entities:read",
+        "comment": "required for DQL fetch dt.entity.* Grail queries"
+      },
+      {
+        "name": "storage:metrics:read",
+        "comment": "required for DQL timeseries metric queries"
+      },
+      {
+        "name": "environment-api:problems:read",
+        "comment": "required for problems API access"
+      },
+      {
+        "name": "environment-api:entities:read",
+        "comment": "required for dt.entity.network:device queries"
+      },
+      {
+        "name": "environment-api:metrics:read",
+        "comment": "required for network device metric queries"
+      },
+      {
+        "name": "settings:objects:read",
+        "comment": "required for settings queries"
+      },
+      {
+        "name": "storage:filter-segments:read",
+        "comment": "required for SegmentSelector filter segments"
+      },
+      {
+        "name": "storage:smartscape:read",
+        "comment": "required for smartscapeNodes topology neighbor traversal"
+      }
+    ]
+  }
+}

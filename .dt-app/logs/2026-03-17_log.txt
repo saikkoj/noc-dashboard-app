@@ -1,0 +1,95 @@
+2026-03-17T17:18:23.972Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-17T17:18:23.972Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-17T17:18:23.972Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "237380934698939300"
+2026-03-17T17:18:23.973Z DEBUG [TELEMETRY] Identification successful
+2026-03-17T17:18:26.260Z DEBUG [BUILD_TIME] Built UI in 1020.2456670000001ms.
+2026-03-17T17:18:26.261Z DEBUG [BUILD_TIME] Built in 2066.131708ms.
+2026-03-17T17:18:26.262Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/main.js (777.78 KB)
+2026-03-17T17:18:26.262Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/main.css (252.71 KB)
+2026-03-17T17:18:26.262Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/index.html (0.51 KB)
+2026-03-17T17:18:27.412Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-17T17:18:27.564Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-17T17:18:52.855Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-17T17:18:52.855Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-17T17:18:54.199Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D7a45fc92-4147-459a-9ee5-a66b9ea3d041&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-17T17:18:54.199Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-17T17:18:54.199Z DEBUG [AUTH] Authenticate with Dynatrace SSO
+2026-03-17T17:18:54.570Z DEBUG [AUTH] SSO-link https://sso.dynatrace.com/oauth2/authorize?client_id=dt0s08.dt-app-local&redirect_uri=http%3A%2F%2Flocalhost%3A5345%2Fauth%2Flogin&state=7a87a6356ad2a75e418be5800e643d80d3891a13&response_type=code&code_challenge_method=S256&code_challenge=hPQfkk0T_sOLWPI-hUkp7tvAta1oCdCNlMMTg6Sslis
+2026-03-17T17:18:55.466Z DEBUG [AUTH] Received authorized code for oAuth
+2026-03-17T17:18:55.818Z INFO > CLI configuration: error: 'app.description' must NOT have more than 80 characters.
+2026-03-17T17:20:38.782Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-17T17:20:38.783Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-17T17:20:38.783Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "237380934698939300"
+2026-03-17T17:20:38.784Z DEBUG [TELEMETRY] Identification successful
+2026-03-17T17:20:40.093Z DEBUG [BUILD_TIME] Built UI in 212.02612499999987ms.
+2026-03-17T17:20:40.094Z DEBUG [BUILD_TIME] Built in 1047.532ms.
+2026-03-17T17:20:40.094Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/main.js (777.79 KB)
+2026-03-17T17:20:40.095Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/main.css (252.71 KB)
+2026-03-17T17:20:40.095Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/index.html (0.51 KB)
+2026-03-17T17:20:42.002Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-17T17:20:42.154Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-17T17:21:32.964Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-17T17:21:32.964Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-17T17:21:34.293Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3Dc6dbc120-ffa1-400e-bfa2-b9f8835fad4b&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-17T17:21:34.293Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-17T17:21:35.060Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-17T17:21:35.061Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-17T17:21:35.061Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "237380934698939300"
+2026-03-17T17:21:35.062Z DEBUG [TELEMETRY] Identification successful
+2026-03-17T17:21:36.355Z DEBUG [BUILD_TIME] Built UI in 218.0397079999998ms.
+2026-03-17T17:21:36.356Z DEBUG [BUILD_TIME] Built in 986.6565ms.
+2026-03-17T17:21:36.358Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/main.js (777.79 KB)
+2026-03-17T17:21:36.358Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/main.css (252.71 KB)
+2026-03-17T17:21:36.358Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/index.html (0.51 KB)
+2026-03-17T17:21:36.374Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-17T17:21:36.374Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3Dc6dbc120-ffa1-400e-bfa2-b9f8835fad4b&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-17T17:21:36.374Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-17T17:21:36.374Z DEBUG [DEPLOY] Installing the app
+2026-03-17T17:21:36.768Z DEBUG [APP-REGISTRY] Failed to install the app
+HTTP 400 Bad Request
+
+Invalid app structure
+
+
+Apps outside the namespace 'my' must be signed. Please sign the app or use 'my.vaino.network.radar' instead of 'dna.vaino.network.radar'.{
+  "code": 400,
+  "message": "Invalid app structure",
+  "details": {
+    "constraintViolations": [
+      {
+        "path": "manifest.yaml",
+        "message": "Apps outside the namespace 'my' must be signed. Please sign the app or use 'my.vaino.network.radar' instead of 'dna.vaino.network.radar'."
+      }
+    ]
+  }
+}
+2026-03-17T17:21:36.768Z ERROR Error: Failed to install the app
+HTTP 400 Bad Request
+
+Invalid app structure
+
+
+Apps outside the namespace 'my' must be signed. Please sign the app or use 'my.vaino.network.radar' instead of 'dna.vaino.network.radar'.
+2026-03-17T17:21:36.768Z DEBUG [TELEMETRY] Reporting error cause
+2026-03-17T17:21:36.769Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-17T17:21:36.920Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-17T17:21:53.277Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-17T17:21:53.277Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-17T17:21:54.486Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D23f6543a-1c27-4368-8402-96c1f54e6826&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-17T17:21:54.486Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-17T17:21:55.100Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-17T17:21:55.100Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-17T17:21:55.100Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "237380934698939300"
+2026-03-17T17:21:55.101Z DEBUG [TELEMETRY] Identification successful
+2026-03-17T17:21:56.285Z DEBUG [BUILD_TIME] Built UI in 211.43558399999984ms.
+2026-03-17T17:21:56.286Z DEBUG [BUILD_TIME] Built in 901.5190419999999ms.
+2026-03-17T17:21:56.287Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/main.js (777.79 KB)
+2026-03-17T17:21:56.287Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/main.css (252.71 KB)
+2026-03-17T17:21:56.287Z DEBUG [FILES] CREATED: /Users/janne.saikko/dna-vaino-app/dist/ui/index.html (0.51 KB)
+2026-03-17T17:21:56.303Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-17T17:21:56.303Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D23f6543a-1c27-4368-8402-96c1f54e6826&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-17T17:21:56.303Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-17T17:21:56.303Z DEBUG [DEPLOY] Installing the app
+2026-03-17T17:21:57.016Z DEBUG [DEPLOY] App installed
+2026-03-17T17:21:57.903Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-17T17:21:58.056Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
