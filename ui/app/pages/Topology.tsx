@@ -10,8 +10,9 @@ import { GraphScene3D } from '../components/GraphScene3D';
 import { TopologyToolbar } from '../components/TopologyToolbar';
 import type { RenderMode } from '../components/TopologyToolbar';
 import { NodeDetailPanel } from '../components/NodeDetailPanel';
+import { EdgeDetailPanel } from '../components/EdgeDetailPanel';
 import { useTopologyData } from '../hooks/useTopologyData';
-import type { TopologyNode, TopologyEdgeType } from '../types/network';
+import type { TopologyNode, TopologyEdge, TopologyEdgeType } from '../types/network';
 import { TOPOLOGY_LAYERS, getLayerForRole } from '../types/network';
 import type { LayoutMode } from '../utils/layoutEngine';
 import { modeBadgeStyle } from '../utils';
@@ -32,6 +33,7 @@ export function Topology() {
     new Set(TOPOLOGY_LAYERS.map(l => l.id)),
   );
   const [selectedNode, setSelectedNode] = useState<TopologyNode | null>(null);
+  const [selectedEdge, setSelectedEdge] = useState<TopologyEdge | null>(null);
   const [isolatedNodeId, setIsolatedNodeId] = useState<string | null>(null);
 
   // Data hooks
@@ -67,7 +69,15 @@ export function Topology() {
     });
   }, []);
 
-  const handleSelectNode = useCallback((n: TopologyNode | null) => setSelectedNode(n), []);
+  const handleSelectNode = useCallback((n: TopologyNode | null) => {
+    setSelectedNode(n);
+    if (n) setSelectedEdge(null); // clear edge selection when picking a node
+  }, []);
+
+  const handleSelectEdge = useCallback((e: TopologyEdge) => {
+    setSelectedEdge(e);
+    setSelectedNode(null); // clear node selection when picking an edge
+  }, []);
 
   const handleIsolate = useCallback((nodeId: string) => {
     setIsolatedNodeId(prev => prev === nodeId ? null : nodeId);
@@ -175,6 +185,7 @@ export function Topology() {
               height={size.h}
               selectedNodeId={selectedNode?.id}
               onSelectNode={handleSelectNode}
+              onEdgeClick={handleSelectEdge}
               visibleEdgeTypes={visibleEdgeTypes}
               visibleLayers={visibleLayers}
               layoutMode={layoutMode}
@@ -187,6 +198,7 @@ export function Topology() {
               height={Math.max(size.h, 500)}
               selectedNodeId={selectedNode?.id}
               onNodeClick={handleSelectNode}
+              onEdgeClick={handleSelectEdge}
               visibleLayers={visibleLayers}
             />
           )}
@@ -197,6 +209,13 @@ export function Topology() {
               onClose={() => setSelectedNode(null)}
               onIsolate={handleIsolate}
               isIsolated={isolatedNodeId === selectedNode.id}
+            />
+          )}
+
+          {selectedEdge && !selectedNode && (
+            <EdgeDetailPanel
+              edge={selectedEdge}
+              onClose={() => setSelectedEdge(null)}
             />
           )}
         </div>

@@ -168,6 +168,8 @@ export interface TopologyNode {
   k8sEntityId?: string;
 }
 
+export type EdgeHealth = 'healthy' | 'warning' | 'critical' | 'unknown';
+
 export interface TopologyEdge {
   id?: string;
   source: string;
@@ -176,8 +178,22 @@ export interface TopologyEdge {
   bandwidth: number;
   edgeType?: TopologyEdgeType;
   directed?: boolean;
+  /** Derived health of this connection */
+  health?: EdgeHealth;
+  /** Human-readable explanation of the health status */
+  healthReason?: string;
   /** Call count / request volume on this edge */
   callCount?: number;
+  /** Resolved display label for source node */
+  sourceLabel?: string;
+  /** Resolved display label for target node */
+  targetLabel?: string;
+  /** LLDP: source interface name */
+  sourceInterface?: string;
+  /** LLDP: target (neighbor) interface name */
+  targetInterface?: string;
+  /** BGP: peer session state (numeric avg, 6 = Established) */
+  bgpState?: number;
 }
 
 /* ── Network device & interface types ──────────────── */

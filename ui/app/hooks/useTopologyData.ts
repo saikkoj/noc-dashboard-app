@@ -123,7 +123,7 @@ export function useTopologyData(
   );
 
   const locResult = useDql(
-    { query: NETWORK_QUERIES.deviceLocations },
+    { query: NETWORK_QUERIES.deviceLocations, defaultTimeframeStart: tfStart, defaultTimeframeEnd: tfEnd },
     { enabled: !demoMode, refetchInterval: 120_000 },
   );
 
@@ -169,7 +169,7 @@ export function useTopologyData(
 
   /* ── K8S entity mapping (SERVICE belongs_to K8S_DEPLOYMENT) ── */
   const svcK8sResult = useDql(
-    { query: NETWORK_QUERIES.serviceK8sMapping },
+    { query: NETWORK_QUERIES.serviceK8sMapping, defaultTimeframeStart: tfStart, defaultTimeframeEnd: tfEnd },
     { enabled: !demoMode, refetchInterval: 120_000 },
   );
 
@@ -312,13 +312,18 @@ export function useTopologyData(
         const tgtName = String(r.targetName ?? '');
         const source = nameToId.get(srcName) ?? String(r.sourceDevice ?? '');
         const target = nameToId.get(tgtName) ?? String(r.targetDevice ?? '');
-        return { source, target, utilization: 0, bandwidth: 0, edgeType: 'lldp' as const, directed: true };
+        return {
+          source, target, utilization: 0, bandwidth: 0, edgeType: 'lldp' as const, directed: true,
+          sourceInterface: String(r.sourceInterface ?? ''),
+          targetInterface: String(r.neighborInterface ?? ''),
+        };
       })
       .filter(e => nodeIds.has(e.source) && nodeIds.has(e.target));
 
     const bgpEdges: TopologyEdge[] = (bgpEdgesResult.data?.records ?? []).map((r: any) => ({
       source: String(r.source ?? ''), target: String(r.target ?? ''),
       utilization: 0, bandwidth: 0, edgeType: 'bgp' as const,
+      bgpState: toNum(r.bgpState),
     }));
 
     const flowEdges: TopologyEdge[] = (flowEdgesResult.data?.records ?? []).map((r: any) => ({
@@ -345,6 +350,137 @@ export function useTopologyData(
 
     const merged = mergeEdges(lldpEdges, bgpEdges, flowEdges, runsOnEdges, callsEdges, servesEdges);
     const validEdges = merged.filter(e => nodeIds.has(e.source) && nodeIds.has(e.target));
+
+    // Resolve node labels + compute edge health
+    const nodeById = new Map(rawNodes.map(n => [n.id, n]));
+    const idToLabel = new Map(rawNodes.map(n => [n.id, n.label]));
+
+    /** Build a concrete reason string for why a node is unhealthy, using its actual metrics. */
+    function describeNodeHealth(n: Omit<TopologyNode, 'x' | 'y'>): string {
+      const parts: string[] = [];
+      const role = n.role;
+
+      // Problem count is the primary health driver (mapHealth uses it first)
+      if ((n as any).problems != null) {
+        // problems was consumed by mapHealth but not stored — use health as proxy
+      }
+
+      // Infrastructure metrics (network devices, hosts)
+      if (n.cpu != null && n.cpu > 0) {
+        if (n.cpu >= 90) parts.push(`CPU at ${n.cpu.toFixed(0)}% (critical)`);
+        else if (n.cpu >= 75) parts.push(`CPU at ${n.cpu.toFixed(0)}% (elevated)`);
+      }
+      if (n.memory != null && n.memory > 0) {
+        if (n.memory >= 90) parts.push(`memory at ${n.memory.toFixed(0)}% (critical)`);
+        else if (n.memory >= 75) parts.push(`memory at ${n.memory.toFixed(0)}% (elevated)`);
+      }
+
+      // Service-specific
+      if (role === 'service') {
+        if (n.errorRate != null && n.errorRate > 0) {
+          if (n.errorRate >= 5) parts.push(`error rate ${n.errorRate.toFixed(1)}%`);
+          else if (n.errorRate >= 1) parts.push(`error rate ${n.errorRate.toFixed(1)}% (elevated)`);
+        }
+        if (n.responseTime != null && n.responseTime > 0) {
+          if (n.responseTime >= 5000) parts.push(`response time ${(n.responseTime / 1000).toFixed(1)}s (slow)`);
+          else if (n.responseTime >= 1000) parts.push(`response time ${(n.responseTime / 1000).toFixed(1)}s`);
+        }
+      }
+
+      // Application-specific
+      if (role === 'application') {
+        if (n.apdex != null && n.apdex > 0 && n.apdex < 1) {
+          if (n.apdex < 0.5) parts.push(`Apdex ${n.apdex.toFixed(2)} (poor user experience)`);
+          else if (n.apdex < 0.7) parts.push(`Apdex ${n.apdex.toFixed(2)} (fair)`);
+        }
+      }
+
+      if (parts.length === 0) {
+        // Fallback to Dynatrace problem count / entity state
+        if (n.health === 'critical') return 'has active Dynatrace problems';
+        if (n.health === 'warning') return 'has Dynatrace warnings';
+        return '';
+      }
+      return parts.join(', ');
+    }
+
+    /** Build a single-node explanation with label + real metrics. */
+    function nodeExplanation(nodeId: string, health: string): string {
+      const n = nodeById.get(nodeId);
+      if (!n) return health;
+      const label = n.label;
+      const detail = describeNodeHealth(n);
+      if (health === 'critical') {
+        return detail ? `${label} is critical — ${detail}.` : `${label} is critical — has active Dynatrace problems.`;
+      }
+      if (health === 'warning') {
+        return detail ? `${label} is degraded — ${detail}.` : `${label} is degraded — has Dynatrace warnings.`;
+      }
+      return `${label} is healthy.`;
+    }
+
+    /** Edge-type-specific context for the relationship. */
+    function edgeContext(edgeType: TopologyEdgeType | undefined): string {
+      switch (edgeType) {
+        case 'lldp': return 'This is a physical link (LLDP neighbor) — device issues may cause packet loss or link failure.';
+        case 'runs-on': return 'This is an infrastructure dependency — the host health directly affects workloads running on it.';
+        case 'calls': return 'This is a service-to-service call — failures propagate through the call chain.';
+        case 'serves': return 'This service backs the application — service issues directly impact end users.';
+        case 'flow': return 'This is a traffic flow — network device health affects throughput and latency.';
+        default: return '';
+      }
+    }
+
+    for (const e of validEdges) {
+      e.sourceLabel = idToLabel.get(e.source);
+      e.targetLabel = idToLabel.get(e.target);
+
+      // Derive edge health from type-specific signals + endpoint node health
+      if (e.edgeType === 'bgp' && e.bgpState != null) {
+        const stateNum = Math.round(e.bgpState);
+        const stateNames: Record<number, string> = { 1: 'Idle', 2: 'Connect', 3: 'Active', 4: 'OpenSent', 5: 'OpenConfirm', 6: 'Established' };
+        const stateName = stateNames[stateNum] ?? `state ${e.bgpState.toFixed(1)}`;
+        if (e.bgpState >= 6) {
+          e.health = 'healthy';
+          e.healthReason = `BGP session is ${stateName} — peering is fully operational.`;
+        } else if (e.bgpState >= 3) {
+          e.health = 'warning';
+          e.healthReason = `BGP session is in ${stateName} state (${stateNum}/6) — peering is not fully established. The session may be negotiating or experiencing connectivity issues.`;
+        } else {
+          e.health = 'critical';
+          e.healthReason = `BGP session is in ${stateName} state (${stateNum}/6) — peering is down or failing to initialize. This may indicate a routing failure or misconfiguration.`;
+        }
+      } else {
+        // Worst health of the two connected nodes
+        const srcH = (nodeById.get(e.source)?.health) ?? 'unknown';
+        const tgtH = (nodeById.get(e.target)?.health) ?? 'unknown';
+        const rank = (h: string) => h === 'critical' ? 3 : h === 'warning' ? 2 : h === 'healthy' ? 1 : 0;
+        const worst = rank(srcH) >= rank(tgtH) ? srcH : tgtH;
+        e.health = (worst === 'critical' || worst === 'warning' || worst === 'healthy') ? worst as any : 'unknown';
+
+        const ctx = edgeContext(e.edgeType);
+
+        if (srcH === 'critical' && tgtH === 'critical') {
+          e.healthReason = `Both endpoints have issues. ${nodeExplanation(e.source, srcH)} ${nodeExplanation(e.target, tgtH)} ${ctx}`;
+        } else if (srcH === 'critical') {
+          e.healthReason = `${nodeExplanation(e.source, srcH)} ${ctx}`;
+        } else if (tgtH === 'critical') {
+          e.healthReason = `${nodeExplanation(e.target, tgtH)} ${ctx}`;
+        } else if (srcH === 'warning' && tgtH === 'warning') {
+          e.healthReason = `Both endpoints are degraded. ${nodeExplanation(e.source, srcH)} ${nodeExplanation(e.target, tgtH)} ${ctx}`;
+        } else if (srcH === 'warning') {
+          e.healthReason = `${nodeExplanation(e.source, srcH)} ${ctx}`;
+        } else if (tgtH === 'warning') {
+          e.healthReason = `${nodeExplanation(e.target, tgtH)} ${ctx}`;
+        } else if (srcH === 'healthy' && tgtH === 'healthy') {
+          e.healthReason = 'Both endpoints are healthy — no issues detected.';
+        } else {
+          const srcLabel = e.sourceLabel ?? e.source;
+          const tgtLabel = e.targetLabel ?? e.target;
+          e.healthReason = `Health could not be fully determined (${srcLabel}: ${srcH}, ${tgtLabel}: ${tgtH}).`;
+        }
+      }
+    }
 
     const nodes = computeLayout(rawNodes, validEdges, width, height, layoutMode);
 

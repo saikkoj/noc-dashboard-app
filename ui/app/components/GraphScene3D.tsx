@@ -49,13 +49,14 @@ export interface GraphScene3DProps {
   height?: number;
   selectedNodeId?: string | null;
   onNodeClick?: (node: TopologyNode) => void;
+  onEdgeClick?: (edge: TopologyEdge) => void;
   /** Set of TOPOLOGY_LAYERS ids that are visible */
   visibleLayers?: Set<string>;
 }
 
 /* ── Constants ────────────────────────────────────── */
 
-/** Edge type → color mapping */
+/** Edge type → color mapping (fallback when health is unknown) */
 const EDGE_TYPE_COLOR: Record<TopologyEdgeType, string> = {
   lldp: '#2ab06f',
   bgp: '#4fc3f7',
@@ -64,6 +65,14 @@ const EDGE_TYPE_COLOR: Record<TopologyEdgeType, string> = {
   calls: '#ffd54f',
   serves: '#ff6e40',
   manual: '#888888',
+};
+
+/** Health → color for edges */
+const EDGE_HEALTH_COLOR: Record<string, string> = {
+  healthy: '#2ab06f',
+  warning: '#fd8232',
+  critical: '#dc172a',
+  unknown: '',  // empty = fall through to type color
 };
 
 /** Role → visual shape mapping */
@@ -184,6 +193,7 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
   height = 600,
   selectedNodeId,
   onNodeClick,
+  onEdgeClick,
   visibleLayers,
 }) => {
   /* ── Layer filtering ─── */
@@ -217,6 +227,7 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
   const edgesRef = useRef(edges);
   const selectedRef = useRef(selectedNodeId);
   const hoveredNodeIdRef = useRef<string | null>(null);
+  const hoveredEdgeRef = useRef<TopologyEdge | null>(null);
   const animRef = useRef<{
     startTime: number;
     duration: number;
@@ -380,10 +391,13 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
 
       const edgeType = e.edgeType ?? 'lldp';
       const crossLayer = srcPos.z !== tgtPos.z;
-      ctx.strokeStyle = EDGE_TYPE_COLOR[edgeType] ?? '#555';
-      // Cross-layer edges slightly more transparent
-      ctx.globalAlpha = crossLayer ? 0.25 : 0.45;
-      ctx.lineWidth = crossLayer ? 1.5 : 1;
+      const healthColor = e.health ? EDGE_HEALTH_COLOR[e.health] : '';
+      const edgeColor = healthColor || (EDGE_TYPE_COLOR[edgeType] ?? '#555');
+      ctx.strokeStyle = edgeColor;
+      // Unhealthy edges are more opaque so problems stand out
+      const healthBoost = e.health === 'critical' ? 0.35 : e.health === 'warning' ? 0.2 : 0;
+      ctx.globalAlpha = (crossLayer ? 0.25 : 0.45) + healthBoost;
+      ctx.lineWidth = (crossLayer ? 1.5 : 1) + (e.health === 'critical' ? 1 : e.health === 'warning' ? 0.5 : 0);
 
       // Dashed for cross-layer edges to avoid visual clutter
       if (crossLayer) ctx.setLineDash([4, 3]);
@@ -404,7 +418,7 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
           const mx = sp.sx + dx * 0.7;
           const my = sp.sy + dy * 0.7;
           const angle = Math.atan2(dy, dx);
-          ctx.fillStyle = EDGE_TYPE_COLOR[edgeType] ?? '#555';
+          ctx.fillStyle = edgeColor;
           ctx.beginPath();
           ctx.moveTo(mx + arrowSize * Math.cos(angle), my + arrowSize * Math.sin(angle));
           ctx.lineTo(mx + arrowSize * Math.cos(angle + 2.5), my + arrowSize * Math.sin(angle + 2.5));
@@ -638,6 +652,36 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
     return closest;
   }, [positions3D]);
 
+  /** Point-to-line-segment distance for edge hit testing */
+  const edgeHitTest = useCallback((mx: number, my: number, w: number, h: number): TopologyEdge | null => {
+    const cam = cameraRef.current;
+    const THRESHOLD = 6; // px tolerance
+    let closest: TopologyEdge | null = null;
+    let closestDist = THRESHOLD;
+    for (const e of edgesRef.current) {
+      const srcPos = positions3D.get(e.source);
+      const tgtPos = positions3D.get(e.target);
+      if (!srcPos || !tgtPos) continue;
+      const sp = project(srcPos, cam, w, h);
+      const tp = project(tgtPos, cam, w, h);
+      if (!sp || !tp) continue;
+      // Point-to-segment distance
+      const dx = tp.sx - sp.sx;
+      const dy = tp.sy - sp.sy;
+      const lenSq = dx * dx + dy * dy;
+      if (lenSq < 100) continue; // skip very short edges
+      const t = Math.max(0, Math.min(1, ((mx - sp.sx) * dx + (my - sp.sy) * dy) / lenSq));
+      const px = sp.sx + t * dx;
+      const py = sp.sy + t * dy;
+      const dist = Math.sqrt((mx - px) * (mx - px) + (my - py) * (my - py));
+      if (dist < closestDist) {
+        closestDist = dist;
+        closest = e;
+      }
+    }
+    return closest;
+  }, [positions3D]);
+
   const animateTo = useCallback((to: Camera, duration = 400) => {
     const cam = cameraRef.current;
     animRef.current = {
@@ -684,7 +728,10 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
           hoveredNodeIdRef.current = newId;
           dirtyRef.current = true;
         }
-        canvas.style.cursor = hit ? 'pointer' : 'grab';
+        // Edge hover (only when not hovering a node)
+        const edgeHit = hit ? null : edgeHitTest(e.clientX - rect.left, e.clientY - rect.top, rect.width, rect.height);
+        hoveredEdgeRef.current = edgeHit;
+        canvas.style.cursor = hit || edgeHit ? 'pointer' : 'grab';
       }
       return;
     }
@@ -793,13 +840,19 @@ export const GraphScene3D: React.FC<GraphScene3DProps> = React.memo(({
   }, []);
 
   const handleClick = useCallback((e: React.MouseEvent) => {
-    if (!onNodeClick) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const hit = hitTest(e.clientX - rect.left, e.clientY - rect.top, rect.width, rect.height);
-    if (hit) onNodeClick(hit);
-  }, [onNodeClick, hitTest]);
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const hit = hitTest(mx, my, rect.width, rect.height);
+    if (hit) {
+      if (onNodeClick) onNodeClick(hit);
+      return;
+    }
+    const edgeHit = edgeHitTest(mx, my, rect.width, rect.height);
+    if (edgeHit && onEdgeClick) onEdgeClick(edgeHit);
+  }, [onNodeClick, onEdgeClick, hitTest, edgeHitTest]);
 
   const handleDoubleClick = useCallback((e: React.MouseEvent) => {
     const canvas = canvasRef.current;

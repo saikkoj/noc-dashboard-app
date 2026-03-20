@@ -23,6 +23,13 @@ const EDGE_COLOR: Record<TopologyEdgeType, string> = {
   manual: '#6b7280',
 };
 
+const EDGE_HEALTH_COLOR: Record<string, string> = {
+  healthy: '#2ab06f',
+  warning: '#fd8232',
+  critical: '#dc172a',
+  unknown: '',
+};
+
 /* ── Node shape by role ────────────────────────── */
 function NodeShape({ node, selected, onClick }: {
   node: TopologyNode;
@@ -124,14 +131,16 @@ function roleIcon(role: DeviceRole): string {
 /* ── Edge line ──────────────────────────────────── */
 const DIRECTED_TYPES = new Set<TopologyEdgeType>(['calls', 'serves', 'runs-on']);
 
-function EdgeLine({ edge, nodeMap }: { edge: TopologyEdge; nodeMap: Map<string, TopologyNode> }) {
+function EdgeLine({ edge, nodeMap, onEdgeClick }: { edge: TopologyEdge; nodeMap: Map<string, TopologyNode>; onEdgeClick?: (e: TopologyEdge) => void }) {
   const src = nodeMap.get(edge.source);
   const tgt = nodeMap.get(edge.target);
   if (!src || !tgt) return null;
 
-  const color = edge.edgeType ? EDGE_COLOR[edge.edgeType] : '#6b7280';
-  const opacity = 0.5 + Math.min(edge.utilization / 100, 1) * 0.5;
-  const width = 1.2 + (edge.utilization / 100) * 2;
+  const healthColor = edge.health ? EDGE_HEALTH_COLOR[edge.health] : '';
+  const color = healthColor || (edge.edgeType ? EDGE_COLOR[edge.edgeType] : '#6b7280');
+  const healthBoost = edge.health === 'critical' ? 0.3 : edge.health === 'warning' ? 0.15 : 0;
+  const opacity = 0.5 + Math.min(edge.utilization / 100, 1) * 0.5 + healthBoost;
+  const width = 1.2 + (edge.utilization / 100) * 2 + (edge.health === 'critical' ? 1.5 : edge.health === 'warning' ? 0.5 : 0);
   const directed = edge.directed || (edge.edgeType && DIRECTED_TYPES.has(edge.edgeType));
   const markerId = directed ? `arrow-${edge.edgeType ?? 'default'}` : undefined;
 
@@ -149,13 +158,29 @@ function EdgeLine({ edge, nodeMap }: { edge: TopologyEdge; nodeMap: Map<string, 
     }
   }
 
+  const handleClick = onEdgeClick ? (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onEdgeClick(edge);
+  } : undefined;
+
   return (
-    <line
-      x1={x1} y1={y1} x2={x2} y2={y2}
-      stroke={color} strokeWidth={width} strokeOpacity={opacity}
-      strokeLinecap="round"
-      markerEnd={markerId ? `url(#${markerId})` : undefined}
-    />
+    <g>
+      <line
+        x1={x1} y1={y1} x2={x2} y2={y2}
+        stroke={color} strokeWidth={width} strokeOpacity={opacity}
+        strokeLinecap="round"
+        markerEnd={markerId ? `url(#${markerId})` : undefined}
+      />
+      {/* Invisible wider hit area for click */}
+      {onEdgeClick && (
+        <line
+          x1={x1} y1={y1} x2={x2} y2={y2}
+          stroke="transparent" strokeWidth={Math.max(12, width + 8)}
+          style={{ cursor: 'pointer' }}
+          onClick={handleClick}
+        />
+      )}
+    </g>
   );
 }
 
@@ -195,6 +220,7 @@ export interface TopologyMapProps {
   edges: TopologyEdge[];
   selectedNodeId?: string | null;
   onSelectNode?: (node: TopologyNode | null) => void;
+  onEdgeClick?: (edge: TopologyEdge) => void;
   width?: number;
   height?: number;
   visibleEdgeTypes?: Set<TopologyEdgeType>;
@@ -209,6 +235,7 @@ export function TopologyMap({
   edges,
   selectedNodeId,
   onSelectNode,
+  onEdgeClick,
   width = 960,
   height = 540,
   visibleEdgeTypes,
@@ -382,7 +409,7 @@ export function TopologyMap({
 
           {/* Edges */}
           {filteredEdges.map((e, i) => (
-            <EdgeLine key={`e-${i}`} edge={e} nodeMap={nodeMap} />
+            <EdgeLine key={`e-${i}`} edge={e} nodeMap={nodeMap} onEdgeClick={onEdgeClick} />
           ))}
 
           {/* Nodes */}

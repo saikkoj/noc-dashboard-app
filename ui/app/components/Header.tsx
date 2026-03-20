@@ -33,7 +33,12 @@ export function Header() {
   const handleTimeframeChange = useCallback((tf: Timeframe | null) => {
     setTimeframeValue(tf);
     if (tf) {
-      setTimeframe(tf.from.value, tf.to.value);
+      // Always use absoluteDate — the resolved ISO string — so the
+      // timeframe context gets a reliable value regardless of whether
+      // the selector returned an expression or a custom absolute range.
+      const fromStr = tf.from.absoluteDate ?? tf.from.value;
+      const toStr = tf.to.absoluteDate ?? tf.to.value;
+      setTimeframe(fromStr, toStr);
     }
   }, [setTimeframe]);
 

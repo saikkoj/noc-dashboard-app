@@ -1,0 +1,510 @@
+2026-03-20T10:06:07.181Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T10:06:07.181Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T10:06:08.625Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D46aede66-0d39-4748-9fb3-10be399ec3dd&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T10:06:08.625Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T10:06:08.625Z DEBUG [AUTH] OAuth2 token expired with a value of: -60935.625 seconds
+2026-03-20T10:06:08.789Z ERROR Token is invalid
+2026-03-20T10:06:09.600Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T10:06:09.600Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T10:06:10.876Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3Dc7275d54-6bcd-45aa-8d45-abc347fa5ecc&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T10:06:10.876Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T10:06:10.877Z DEBUG [AUTH] OAuth2 token expired with a value of: -60937.877 seconds
+2026-03-20T10:06:11.029Z ERROR Token is invalid
+2026-03-20T10:06:11.688Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T10:06:11.688Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T10:06:12.973Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D34fc0fd7-d96a-4db6-8e3c-d5094b5d2c5d&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T10:06:12.973Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T10:06:12.973Z DEBUG [AUTH] OAuth2 token expired with a value of: -60939.973 seconds
+2026-03-20T10:06:13.130Z ERROR Token is invalid
+2026-03-20T10:06:13.826Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T10:06:13.826Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T10:06:15.072Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3Da49c5eb8-b033-4cab-9109-b025cc379b0e&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T10:06:15.072Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T10:06:15.073Z DEBUG [AUTH] OAuth2 token expired with a value of: -60942.073000000004 seconds
+2026-03-20T10:06:15.228Z ERROR Token is invalid
+2026-03-20T10:06:15.879Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T10:06:15.879Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T10:06:17.164Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D717ab323-f63d-41df-8234-98be115a7da5&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T10:06:17.164Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T10:06:17.164Z DEBUG [AUTH] OAuth2 token expired with a value of: -60944.164000000004 seconds
+2026-03-20T10:06:17.782Z ERROR Token is invalid
+2026-03-20T10:13:57.869Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T10:13:57.870Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T10:13:59.223Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3Da164d82c-e99f-4b35-b2c1-c30a4a4457d2&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T10:13:59.223Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T10:13:59.225Z DEBUG [AUTH] OAuth2 token expired with a value of: -61406.225 seconds
+2026-03-20T10:13:59.437Z DEBUG [AUTH] Authenticate with Dynatrace SSO
+2026-03-20T10:13:59.803Z DEBUG [AUTH] SSO-link https://sso.dynatrace.com/oauth2/authorize?client_id=dt0s08.dt-app-local&redirect_uri=http%3A%2F%2Flocalhost%3A5343%2Fauth%2Flogin&state=349a8ea8d6f939bc0db5e3719c2bf116ee0ea398&response_type=code&code_challenge_method=S256&code_challenge=jVqPK3CSRSmCtgpx_huv2kVjAfIzcMaFKrudXzv_-8E
+2026-03-20T10:14:00.273Z DEBUG [AUTH] Received authorized code for oAuth
+2026-03-20T10:14:00.490Z INFO Authentication completed successfully
+2026-03-20T10:14:03.478Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T10:14:03.478Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T10:14:04.839Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D5ce6832a-ec6e-42ac-9e62-4c045e3f4c8a&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T14:58:19.456Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T14:58:19.456Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T14:58:21.067Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D933f97ff-3fd6-4c97-9b4b-d780e4161ece&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T14:58:21.067Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T14:58:21.068Z DEBUG [AUTH] OAuth2 token expired with a value of: -16761.068 seconds
+2026-03-20T14:58:21.241Z DEBUG [AUTH] Refresh process for token toolkit has failed with: Error: Invalid OAuth2 request. UNSUCCESSFUL_OAUTH_REFRESH_TOKEN_VALIDATION_FAILED | RefreshToken: '******f9fcdaea' for clientId: 'dt0s08.dt-app-local' doesn't exist. (traceId: D34KWGGLAABCX2NK). Proceeding with SSO flow instead.
+2026-03-20T14:58:21.241Z DEBUG [AUTH] Authenticate with Dynatrace SSO
+2026-03-20T14:58:21.657Z DEBUG [AUTH] SSO-link https://sso.dynatrace.com/oauth2/authorize?client_id=dt0s08.dt-app-local&redirect_uri=http%3A%2F%2Flocalhost%3A5343%2Fauth%2Flogin&state=353a2458e5b2378f921617bdbd2dc69018100024&response_type=code&code_challenge_method=S256&code_challenge=nQivkWgJZCaMcrQIF9mh3mcIhAoeQvD5DpSaB9TZb_o
+2026-03-20T14:58:22.723Z DEBUG [AUTH] Received authorized code for oAuth
+2026-03-20T14:58:23.690Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T14:58:23.691Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T14:58:23.691Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T14:58:23.693Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T14:58:34.184Z DEBUG [BUILD_TIME] Built UI in 4044.347833ms.
+2026-03-20T14:58:34.186Z DEBUG [BUILD_TIME] Built in 9949.46175ms.
+2026-03-20T14:58:34.186Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3508.49 KB)
+2026-03-20T14:58:34.186Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T14:58:34.186Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T14:58:34.219Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T14:58:34.248Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T14:58:34.248Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D933f97ff-3fd6-4c97-9b4b-d780e4161ece&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T14:58:34.248Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T14:58:34.248Z DEBUG [DEPLOY] Installing the app
+2026-03-20T14:58:35.553Z DEBUG [APP-REGISTRY] Failed to install the app
+HTTP 400 Bad Request
+
+Cannot install app with version 0.11.2 because the same version is already installed with a different checksum.
+{
+  "code": 400,
+  "message": "Cannot install app with version 0.11.2 because the same version is already installed with a different checksum."
+}
+2026-03-20T14:58:35.555Z ERROR Error: Failed to install the app
+HTTP 400 Bad Request
+
+Cannot install app with version 0.11.2 because the same version is already installed with a different checksum.
+
+2026-03-20T14:58:35.555Z DEBUG [TELEMETRY] Reporting error cause
+2026-03-20T14:58:35.557Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T14:58:36.079Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T14:58:52.800Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T14:58:52.800Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T14:58:54.642Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3De2891165-2c75-4c07-bcd7-7de06064492b&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T14:58:54.642Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T14:58:55.542Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T14:58:55.543Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T14:58:55.543Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T14:58:55.544Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T14:59:02.327Z DEBUG [BUILD_TIME] Built UI in 638.1185409999998ms.
+2026-03-20T14:59:02.328Z DEBUG [BUILD_TIME] Built in 6495.074708ms.
+2026-03-20T14:59:02.329Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3508.49 KB)
+2026-03-20T14:59:02.329Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T14:59:02.329Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T14:59:02.363Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T14:59:02.394Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T14:59:02.394Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3De2891165-2c75-4c07-bcd7-7de06064492b&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T14:59:02.394Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T14:59:02.394Z DEBUG [DEPLOY] Installing the app
+2026-03-20T14:59:03.751Z DEBUG [APP-REGISTRY] Failed to install the app
+HTTP 400 Bad Request
+
+Cannot install app with version 0.11.2 because the same version is already installed with a different checksum.
+{
+  "code": 400,
+  "message": "Cannot install app with version 0.11.2 because the same version is already installed with a different checksum."
+}
+2026-03-20T14:59:03.753Z ERROR Error: Failed to install the app
+HTTP 400 Bad Request
+
+Cannot install app with version 0.11.2 because the same version is already installed with a different checksum.
+
+2026-03-20T14:59:03.753Z DEBUG [TELEMETRY] Reporting error cause
+2026-03-20T14:59:03.755Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T14:59:03.923Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T14:59:17.860Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T14:59:17.860Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T14:59:19.563Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3Dc507f996-e86f-4957-b6c8-3a8f8990aa07&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T14:59:19.563Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T14:59:20.310Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T14:59:20.310Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T14:59:20.310Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T14:59:20.312Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T14:59:26.934Z DEBUG [BUILD_TIME] Built UI in 639.2483749999992ms.
+2026-03-20T14:59:26.936Z DEBUG [BUILD_TIME] Built in 6327.86425ms.
+2026-03-20T14:59:26.938Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3508.49 KB)
+2026-03-20T14:59:26.938Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T14:59:26.938Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T14:59:26.971Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T14:59:26.999Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T14:59:26.999Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3Dc507f996-e86f-4957-b6c8-3a8f8990aa07&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T14:59:26.999Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T14:59:27.000Z DEBUG [DEPLOY] Installing the app
+2026-03-20T14:59:28.449Z DEBUG [DEPLOY] App installed
+2026-03-20T14:59:29.410Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T14:59:29.578Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:05:02.648Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:05:02.648Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:05:04.932Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D4c406e67-6a6d-4314-99ed-93e72e302e10&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:05:04.932Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:05:04.934Z DEBUG [AUTH] OAuth2 token expired with a value of: -102.934 seconds
+2026-03-20T15:05:05.980Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:05:05.980Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:05:05.980Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:05:05.984Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:05:12.608Z DEBUG [BUILD_TIME] Built UI in 623.4919999999984ms.
+2026-03-20T15:05:12.609Z DEBUG [BUILD_TIME] Built in 6296.657042000001ms.
+2026-03-20T15:05:12.610Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3508.49 KB)
+2026-03-20T15:05:12.610Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T15:05:12.610Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T15:05:12.644Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T15:05:12.725Z INFO  Ran with --dry-run so nothing was deployed
+2026-03-20T15:05:12.725Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:05:12.888Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:18:25.261Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:18:25.261Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:18:27.087Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D438b2068-56c8-472d-bbae-fdbff99953ef&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:18:27.087Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:18:27.090Z DEBUG [AUTH] OAuth2 token expired with a value of: -502.09000000000003 seconds
+2026-03-20T15:18:28.196Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:18:28.198Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:18:28.198Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:18:28.199Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:18:37.274Z DEBUG [BUILD_TIME] Built UI in 2774.3578340000004ms.
+2026-03-20T15:18:37.275Z DEBUG [BUILD_TIME] Built in 8754.063917ms.
+2026-03-20T15:18:37.276Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3513.91 KB)
+2026-03-20T15:18:37.276Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T15:18:37.276Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T15:18:37.311Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T15:18:37.340Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:18:37.340Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D438b2068-56c8-472d-bbae-fdbff99953ef&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:18:37.340Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:18:37.341Z DEBUG [DEPLOY] Installing the app
+2026-03-20T15:18:38.779Z DEBUG [DEPLOY] App installed
+2026-03-20T15:18:39.978Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:18:40.509Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:20:48.069Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:20:48.069Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:20:49.741Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D27428b08-c4fd-4ba8-9b71-3df40826009f&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:20:49.741Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:20:50.566Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:20:50.566Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:20:50.566Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:20:50.567Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:20:57.063Z DEBUG [BUILD_TIME] Built UI in 616.278459000001ms.
+2026-03-20T15:20:57.065Z DEBUG [BUILD_TIME] Built in 6219.8899169999995ms.
+2026-03-20T15:20:57.065Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3513.91 KB)
+2026-03-20T15:20:57.065Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T15:20:57.065Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T15:20:57.095Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T15:20:57.177Z INFO  Ran with --dry-run so nothing was deployed
+2026-03-20T15:20:57.177Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:20:57.361Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:22:25.078Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:22:25.079Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:22:26.874Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D81536001-8ace-424a-a5f6-51308dcac033&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:22:26.874Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:22:27.878Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:22:27.878Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:22:27.878Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:22:27.886Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:22:34.393Z DEBUG [BUILD_TIME] Built UI in 651.8457089999993ms.
+2026-03-20T15:22:34.395Z DEBUG [BUILD_TIME] Built in 6189.808333999999ms.
+2026-03-20T15:22:34.395Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3514.18 KB)
+2026-03-20T15:22:34.395Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T15:22:34.395Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T15:22:34.430Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T15:22:34.459Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:22:34.459Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D81536001-8ace-424a-a5f6-51308dcac033&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:22:34.459Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:22:34.459Z DEBUG [AUTH] OAuth2 token expired with a value of: 52.541000000000004 seconds
+2026-03-20T15:22:35.280Z DEBUG [DEPLOY] Installing the app
+2026-03-20T15:22:37.499Z DEBUG [DEPLOY] App installed
+2026-03-20T15:22:38.609Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:22:39.150Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:23:14.362Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:23:14.362Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:23:16.080Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3Dd8a13e32-39db-487d-9b61-3873fc367d22&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:23:16.080Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:23:16.849Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:23:16.849Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:23:16.849Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:23:16.851Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:23:23.294Z DEBUG [BUILD_TIME] Built UI in 626.4052500000016ms.
+2026-03-20T15:23:23.295Z DEBUG [BUILD_TIME] Built in 6167.549999999999ms.
+2026-03-20T15:23:23.296Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3514.18 KB)
+2026-03-20T15:23:23.296Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T15:23:23.296Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T15:23:23.330Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T15:23:23.411Z INFO  Ran with --dry-run so nothing was deployed
+2026-03-20T15:23:23.411Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:23:23.593Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:28:49.999Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:28:49.999Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:28:51.555Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D1ca4c683-7ae8-41b6-9de6-9a8bc1b117e9&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:28:51.555Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:28:51.556Z DEBUG [AUTH] OAuth2 token expired with a value of: -76.556 seconds
+2026-03-20T15:28:52.587Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:28:52.587Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:28:52.588Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:28:52.589Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:28:59.017Z ERROR Error: Cannot use "??" with "||" without parentheses at location: ui/app/components/GraphScene3D.tsx:395:65
+2026-03-20T15:28:59.042Z DEBUG [BUILD_TIME] Built UI in 557.3572910000003ms.
+2026-03-20T15:28:59.043Z ERROR Error: [Experimental] UncaughtException: Error: Build failed with 1 error:
+ui/app/components/GraphScene3D.tsx:395:65: ERROR: Cannot use "??" with "||" without parentheses
+unhandledRejection
+2026-03-20T15:28:59.043Z DEBUG [TELEMETRY] Reporting error cause
+2026-03-20T15:28:59.044Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:28:59.052Z INFO > /Users/janne.saikko/noc-dashboard-app/ui/app/components/GraphScene3D.tsx:395:66 - Error: Cannot use "??" with "||" without parentheses
+  393 |       const crossLayer = srcPos.z !== tgtPos.z;
+  394 |       const healthColor = e.health ? EDGE_HEALTH_COLOR[e.health] : '';
+> 395 |       const edgeColor = healthColor || EDGE_TYPE_COLOR[edgeType] ?? '#555';
+      |                                                                  ^
+  396 |       ctx.strokeStyle = edgeColor;
+  397 |       // Unhealthy edges are more opaque so problems stand out
+  398 |       const healthBoost = e.health === 'critical' ? 0.35 : e.health === 'warning' ? 0.2 : 0;
+2026-03-20T15:28:59.055Z INFO > /Users/janne.saikko/noc-dashboard-app/ui/app/components/GraphScene3D.tsx:395:25 - Error: TS5076 '||' and '??' operations cannot be mixed without parentheses.
+  393 |       const crossLayer = srcPos.z !== tgtPos.z;
+  394 |       const healthColor = e.health ? EDGE_HEALTH_COLOR[e.health] : '';
+> 395 |       const edgeColor = healthColor || EDGE_TYPE_COLOR[edgeType] ?? '#555';
+      |                         ^
+  396 |       ctx.strokeStyle = edgeColor;
+  397 |       // Unhealthy edges are more opaque so problems stand out
+  398 |       const healthBoost = e.health === 'critical' ? 0.35 : e.health === 'warning' ? 0.2 : 0;
+2026-03-20T15:28:59.055Z ERROR Error: Build failed!
+2026-03-20T15:28:59.055Z DEBUG [TELEMETRY] Not reporting this specific error
+2026-03-20T15:28:59.055Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:28:59.226Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:29:08.313Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:29:08.313Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:29:10.049Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D958ec7bc-d7cf-4948-832f-d17fa671fa01&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:29:10.049Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:29:10.765Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:29:10.765Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:29:10.765Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:29:10.768Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:29:17.178Z DEBUG [BUILD_TIME] Built UI in 620.4952090000006ms.
+2026-03-20T15:29:17.180Z DEBUG [BUILD_TIME] Built in 6138.842917000001ms.
+2026-03-20T15:29:17.180Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3515.29 KB)
+2026-03-20T15:29:17.180Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T15:29:17.180Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T15:29:17.213Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T15:29:17.242Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:29:17.242Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D958ec7bc-d7cf-4948-832f-d17fa671fa01&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:29:17.242Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:29:17.242Z DEBUG [DEPLOY] Installing the app
+2026-03-20T15:29:19.007Z DEBUG [DEPLOY] App installed
+2026-03-20T15:29:20.097Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:29:20.355Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:29:57.454Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:29:57.454Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:29:59.205Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D0c1bdc74-38d7-485b-a35c-29d86e5a6300&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:29:59.205Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:29:59.906Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:29:59.906Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:29:59.906Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:29:59.908Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:30:06.288Z DEBUG [BUILD_TIME] Built UI in 660.1018750000003ms.
+2026-03-20T15:30:06.289Z DEBUG [BUILD_TIME] Built in 6075.460875ms.
+2026-03-20T15:30:06.290Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3515.29 KB)
+2026-03-20T15:30:06.290Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T15:30:06.290Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T15:30:06.322Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T15:30:06.400Z INFO  Ran with --dry-run so nothing was deployed
+2026-03-20T15:30:06.400Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:30:06.648Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:33:13.775Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:33:13.775Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:33:15.940Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D0150cbfc-9c1e-4ec6-9d49-99ec41dd07bc&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:33:15.940Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:33:15.942Z DEBUG [AUTH] OAuth2 token expired with a value of: 35.058 seconds
+2026-03-20T15:33:17.106Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:33:17.106Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:33:17.106Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:33:17.107Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:33:23.535Z DEBUG [BUILD_TIME] Built UI in 623.5970410000009ms.
+2026-03-20T15:33:23.536Z DEBUG [BUILD_TIME] Built in 6171.9106249999995ms.
+2026-03-20T15:33:23.537Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3517.20 KB)
+2026-03-20T15:33:23.537Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T15:33:23.537Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T15:33:23.570Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T15:33:23.599Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:33:23.599Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D0150cbfc-9c1e-4ec6-9d49-99ec41dd07bc&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:33:23.599Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:33:23.599Z DEBUG [DEPLOY] Installing the app
+2026-03-20T15:33:25.229Z DEBUG [DEPLOY] App installed
+2026-03-20T15:33:26.210Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:33:26.376Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:36:45.952Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:36:45.952Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:36:47.612Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3Dc6c3789a-8647-425b-a542-9c42adb6c07e&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:36:47.612Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:36:48.440Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:36:48.440Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:36:48.440Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:36:48.442Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:36:55.025Z DEBUG [BUILD_TIME] Built UI in 617.0445830000008ms.
+2026-03-20T15:36:55.026Z DEBUG [BUILD_TIME] Built in 6329.12925ms.
+2026-03-20T15:36:55.027Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3519.00 KB)
+2026-03-20T15:36:55.027Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T15:36:55.027Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T15:36:55.060Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T15:36:55.090Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:36:55.090Z DEBUG [HTTP(S)] Found resolved URL in cache: https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3Dc6c3789a-8647-425b-a542-9c42adb6c07e&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:36:55.090Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:36:55.090Z DEBUG [DEPLOY] Installing the app
+2026-03-20T15:36:56.720Z DEBUG [DEPLOY] App installed
+2026-03-20T15:36:57.705Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:36:57.867Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
+2026-03-20T15:38:18.072Z DEBUG [AUTH] Retrieving SSO-URL for environment 'https://bnk46244.apps.dynatrace.com'
+2026-03-20T15:38:18.072Z DEBUG [HTTP(S)] Execute GET request without allowing redirection to 'https://bnk46244.apps.dynatrace.com/platform/oauth2/authorization/dynatrace-sso'
+2026-03-20T15:38:19.657Z DEBUG [HTTP(S)] Resolved URL is https://sso.dynatrace.com/action/signin?goto=https%3A%2F%2Fsso.dynatrace.com%3A443%2Foauth2%2Fauthorize%2Fredirect%3FoAuth2CtxUuid%3D851e5bf9-c216-48be-bb57-9f8eca7d9e32&oAuth2RedirectUri=https%3A%2F%2Fbnk46244.apps.dynatrace.com%2Fplatform%2Flogin%2Foauth2%2Fcode%2Fdynatrace-sso
+2026-03-20T15:38:19.658Z DEBUG [AUTH] Using SSO-URL 'https://sso.dynatrace.com'
+2026-03-20T15:38:19.659Z DEBUG [AUTH] OAuth2 token expired with a value of: -3.6590000000000003 seconds
+2026-03-20T15:38:20.708Z DEBUG [TELEMETRY] Creating a new HTTP and HTTPS interceptor for tracing
+2026-03-20T15:38:20.708Z DEBUG [TELEMETRY] Successfully initialized OpenKit
+2026-03-20T15:38:20.708Z DEBUG [TELEMETRY] Telemetry enabled: Session ID "389444052875000260"
+2026-03-20T15:38:20.709Z DEBUG [TELEMETRY] Identification successful
+2026-03-20T15:38:27.357Z DEBUG [BUILD_TIME] Built UI in 616.3243749999983ms.
+2026-03-20T15:38:27.358Z DEBUG [BUILD_TIME] Built in 6317.534583ms.
+2026-03-20T15:38:27.359Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.js (3519.00 KB)
+2026-03-20T15:38:27.359Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/main.css (484.55 KB)
+2026-03-20T15:38:27.359Z DEBUG [FILES] CREATED: /Users/janne.saikko/noc-dashboard-app/dist/ui/index.html (0.51 KB)
+2026-03-20T15:38:27.390Z DEBUG [PLATFORM_DEPENDENCIES] 
+Dynatrace Platform Dependencies
+@dynatrace-sdk/client-state/ /platform/state/v1
+@dynatrace-sdk/client-filter-segment-management/ /platform/storage/filter-segments/v1
+@dynatrace-sdk/client-davis-analyzers/ /platform/davis/analyzers/v1
+@dynatrace-sdk/client-document/ /platform/document/v1
+@dynatrace-sdk/client-query/ /platform/storage/query/v1
+@dynatrace-sdk/client-app-settings/ /platform/app-settings/v1
+@dynatrace-sdk/client-app-settings-v2/ /platform/app-settings/v2
+@dynatrace-sdk/client-classic-environment-v2/ /platform/classic/environment-api/v2
+@dynatrace-sdk/client-platform-management-service/ /platform/management/v1
+
+2026-03-20T15:38:27.471Z INFO  Ran with --dry-run so nothing was deployed
+2026-03-20T15:38:27.471Z DEBUG [TELEMETRY] Closing OpenKit connection
+2026-03-20T15:38:27.705Z DEBUG [TELEMETRY] Successfully closed OpenKit connection
