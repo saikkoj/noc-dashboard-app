@@ -265,13 +265,25 @@ export const NETWORK_QUERIES = {
     `| limit 500`,
   ].join('\n'),
 
-  /** Host → Network Device edges (runs-on, for environments with SNMP devices) */
+  /** Host → Network Device edges via IP subnet matching (no Smartscape relationship exists) */
   hostToDeviceEdges: [
     `fetch \`dt.entity.host\``,
-    `| expand deviceId = runs_on[\`dt.entity.network_device\`]`,
-    `| filter isNotNull(deviceId)`,
-    `| fieldsAdd source = id, target = deviceId`,
-    `| fields source, target`,
+    `| expand hostIp = ipAddress`,
+    `| filter startsWith(hostIp, "172.") OR startsWith(hostIp, "10.")`,
+    `| fieldsAdd parts = splitString(hostIp, ".")`,
+    `| fieldsAdd subnet = concat(parts[0], ".", parts[1], ".", parts[2])`,
+    `| lookup [`,
+    `    smartscapeNodes EXT_NETWORK_DEVICE`,
+    `    | filter monitoring_mode == "Discovery"`,
+    `    | expand deviceIp = ip`,
+    `    | filter startsWith(deviceIp, "172.") OR startsWith(deviceIp, "10.")`,
+    `    | fieldsAdd parts = splitString(deviceIp, ".")`,
+    `    | fieldsAdd subnet = concat(parts[0], ".", parts[1], ".", parts[2])`,
+    `    | fields deviceId = id_classic, subnet`,
+    `  ], sourceField:subnet, lookupField:subnet, prefix:"d."`,
+    `| filter isNotNull(d.deviceId)`,
+    `| fields source = id, target = d.deviceId`,
+    `| dedup source, target`,
     `| limit 500`,
   ].join('\n'),
 

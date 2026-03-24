@@ -1,0 +1,18 @@
+{
+  "servers": {
+    "dynatrace-mcp-dev": {
+      "url": "https://yts0540d.dev.apps.dynatracelabs.com/platform-reserved/mcp-gateway/v0.1/servers/dynatrace-mcp/mcp",
+      "headers": {
+        "Authorization": "Bearer ${input:DT_DEV_TOKEN}"
+      }
+    }
+  },
+  "inputs": [
+    {
+      "id": "DT_DEV_TOKEN",
+      "type": "promptString",
+      "description": "Platform token for yts0540d dev environment",
+      "password": true
+    }
+  ]
+}
